@@ -60,7 +60,8 @@
 						<div class="col-md-3">
 							<div class="header-logo">
 								<a href="#" class="logo">
-									<img src="./img/logo.png" alt="">
+									<img src="@Url.Content("~/img/X-SOLAR.png")" alt="" width=200px height=50px>
+									
 								</a>
 							</div>
 						</div>
@@ -102,15 +103,8 @@
 						<!-- ACCOUNT -->
 						<div class="col-md-3 clearfix">
 							<div class="header-ctn">
-								<!-- Wishlist -->
-								<div>
-									<a href="#">
-										<i class="fa fa-heart-o"></i>
-										<span>Your Wishlist</span>
-										<div class="qty">2</div>
-									</a>
-								</div>
-								<!-- /Wishlist -->
+								
+								
 
 								<!-- Cart -->
 								<div class="dropdown">
@@ -119,41 +113,41 @@
 										<span>Your Cart</span>
 										<div class="qty">3</div>
 									</a>
+									
+									
+									
+									
+									
+									
 									<div class="cart-dropdown">
-										<div class="cart-list">
+										<div class="cart-list" id="cartListContainer">
 											<div class="product-widget">
 												<div class="product-img">
 													<img src="./img/product01.png" alt="">
 												</div>
 												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
+													<h3 class="product-name"><a href="#">cartItems.productName</a></h3>
 													<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
 												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
+												<button id="cartListContainer" class="delete"><i class="fa fa-close"></i></button>
 											</div>
 
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="./img/product02.png" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#">product name goes here</a></h3>
-													<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-												</div>
-												<button class="delete"><i class="fa fa-close"></i></button>
-											</div>
+											
+											
 										</div>
 										<div class="cart-summary">
-											<small>3 Item(s) selected</small>
-											<h5>SUBTOTAL: $2940.00</h5>
+											<small id="cartItemCountText">3 Item(s) selected</small>
+											<h5 id="cartTotalPrice">SUBTOTAL: 2940.00</h5>
 										</div>
 										<div class="cart-btns">
-											<a href="#">View Cart</a>
-											<a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+											<a href="/cart">View Cart</a>
+											<a href="/cart">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
 										</div>
 									</div>
 								</div>
 								<!-- /Cart -->
+								
+								
 
 								<!-- Menu Toogle -->
 								<div class="menu-toggle">
@@ -187,7 +181,7 @@
 		
 		<!-- /SECTION -->
 
-		<!-- NEWSLETTER -->
+		<!-- CONTACTUS -->
 		<div id="newsletter" class="section">
 			<!-- container -->
 			<div class="container">
@@ -195,25 +189,38 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="newsletter">
-							<p>Sign Up for the <strong>NEWSLETTER</strong></p>
-							<form>
-								<input class="input" type="email" placeholder="Enter Your Email">
-								<button class="newsletter-btn"><i class="fa fa-envelope"></i> Subscribe</button>
+							<p>Get in <strong>TOUCH</strong></p>
+							
+							
+						<form name="sentMessage" id="contactForm" novalidate="novalidate">
+								<div class="form-row">
+									<div class="col-sm-6 control-group">
+										<input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="name" placeholder="Your Name" required="required" data-validation-required-message="Please enter your name" />
+										<p class="help-block text-danger"></p>
+									</div>
+									<div class="col-sm-6 control-group">
+										<input type="email" class="form-control bg-secondary border-0 py-4 px-3" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
+										<p class="help-block text-danger"></p>
+									</div>
+								</div>
+								<div class="control-group">
+									<input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="subject" placeholder="Subject" required="required" data-validation-required-message="Please enter a subject" />
+									<p class="help-block text-danger"></p>
+								</div>
+								<div class="control-group">
+									<textarea class="form-control bg-secondary border-0 py-2 px-3" rows="6" id="message" placeholder="Message" required="required" data-validation-required-message="Please enter your message"></textarea>
+									<p class="help-block text-danger"></p>
+								</div>
+								<div class="text-center">
+									<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="sendMessageButton">Send Message</button>
+								</div>
 							</form>
-							<ul class="newsletter-follow">
-								<li>
-									<a href="#"><i class="fa fa-facebook"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-twitter"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-instagram"></i></a>
-								</li>
-								<li>
-									<a href="#"><i class="fa fa-pinterest"></i></a>
-								</li>
-							</ul>
+							
+							
+						
+							
+							
+							
 						</div>
 					</div>
 				</div>
@@ -221,7 +228,7 @@
 			</div>
 			<!-- /container -->
 		</div>
-		<!-- /NEWSLETTER -->
+		<!-- /CONTACTUS -->
 
 		<!-- FOOTER -->
 		<footer id="footer">
@@ -234,11 +241,11 @@
 						<div class="col-md-3 col-xs-6">
 							<div class="footer">
 								<h3 class="footer-title">About Us</h3>
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut.</p>
+								<p>X-Solar provides services to both individuals and legal entities, and we are also ready to cooperate with companies that install solar panels.</p>
 								<ul class="footer-links">
-									<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-									<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-									<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+									<li><a href="#"><i class="fa fa-map-marker"></i>2nd Lane, Nawala Road, Sri Lanka</a></li>
+									<li><a href="#"><i class="fa fa-phone"></i>+94 20335984</a></li>
+									<li><a href="#"><i class="fa fa-envelope-o"></i>Shanaka@devbranch.net</a></li>
 								</ul>
 							</div>
 						</div>
@@ -247,11 +254,10 @@
 							<div class="footer">
 								<h3 class="footer-title">Categories</h3>
 								<ul class="footer-links">
-									<li><a href="#">Hot deals</a></li>
-									<li><a href="#">Laptops</a></li>
-									<li><a href="#">Smartphones</a></li>
-									<li><a href="#">Cameras</a></li>
-									<li><a href="#">Accessories</a></li>
+									<li><a href="/store">Solar Panel</a></li>
+									<li><a href="/inverter">Inventers</a></li>
+									<li><a href="#">Battries</a></li>
+									
 								</ul>
 							</div>
 						</div>
@@ -265,8 +271,7 @@
 									<li><a href="#">About Us</a></li>
 									<li><a href="#">Contact Us</a></li>
 									<li><a href="#">Privacy Policy</a></li>
-									<li><a href="#">Orders and Returns</a></li>
-									<li><a href="#">Terms & Conditions</a></li>
+									
 								</ul>
 							</div>
 						</div>
@@ -276,9 +281,7 @@
 								<h3 class="footer-title">Service</h3>
 								<ul class="footer-links">
 									<li><a href="#">My Account</a></li>
-									<li><a href="#">View Cart</a></li>
-									<li><a href="#">Wishlist</a></li>
-									<li><a href="#">Track My Order</a></li>
+									<li><a href="/cart">View Cart</a></li>
 									<li><a href="#">Help</a></li>
 								</ul>
 							</div>
@@ -296,14 +299,7 @@
 					<!-- row -->
 					<div class="row">
 						<div class="col-md-12 text-center">
-							<ul class="footer-payments">
-								<li><a href="#"><i class="fa fa-cc-visa"></i></a></li>
-								<li><a href="#"><i class="fa fa-credit-card"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-paypal"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-mastercard"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-discover"></i></a></li>
-								<li><a href="#"><i class="fa fa-cc-amex"></i></a></li>
-							</ul>
+							
 							<span class="copyright">
 								<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 								Copyright &copy;<script>document.write(new Date().getFullYear());</script> All rights reserved | This template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a href="https://colorlib.com" target="_blank">Colorlib</a>
@@ -329,6 +325,9 @@
 <script src="@Url.Content("~/js/scroll.js")"></script>
 <script src="@Url.Content("~/js/search.js")"></script>
 <!-- ... Your HTML code ... -->
+<script src="@Url.Content("~/js/custom.js")"></script>
+<script src="@Url.Content("~/js/contactusform.js")"></script>
+
 
 <!-- ... Your HTML code ... -->
 
