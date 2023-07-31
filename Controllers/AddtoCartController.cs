@@ -29,22 +29,15 @@ namespace UmbracoSolarProject1.Controllers
 
 		[HttpPost]
 		[Route("AddItem")]
-		public async Task<IActionResult> AddItem([FromBody] CartItem item)
+		public async Task<IActionResult> AddItem([FromBody] CartItem item,string Id)
 		{
 			try
 			{
-				// Check if the user is authenticated
-				if (!User.Identity.IsAuthenticated)
-				{
-					return Unauthorized(new { message = "You need to log in to add items to the cart." });
-				}
-
 				
-
 				// Save the cart item details along with the user ID to the database
 				var cartItem = new CartItem
 				{
-					
+					Id=Id,
 					ProductName = item.ProductName,
 					ProductPrice = item.ProductPrice,
 					ProductThumbnail = item.ProductThumbnail,

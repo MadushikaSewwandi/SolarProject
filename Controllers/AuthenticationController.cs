@@ -50,7 +50,7 @@ namespace UmbracoSolarProject1.Controllers
 
 		[HttpPost]
 		[Route("Login")]
-		public async Task<IActionResult> Login([FromBody] Login model)
+		public async Task<IActionResult> Login([FromBody] Login model,)
 		{
 			try
 			{
@@ -75,8 +75,9 @@ namespace UmbracoSolarProject1.Controllers
 				var token = new JwtSecurityToken(
 					issuer: _configuration["JWT:Issuer"],
 					audience: _configuration["JWT:Audience"],
-					expires: DateTime.Now.AddHours(3)
-					
+					expires: DateTime.Now.AddHours(3),
+					signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+
 				);
 
 				return Ok(new

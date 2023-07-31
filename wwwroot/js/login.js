@@ -25,6 +25,10 @@ $(document).ready(function () {
                  console.log(response);
                 localStorage.setItem("token", response.token);
                 console.log(localStorage.getItem("token"));
+                var decodedToken = jwt.decode(token);
+                console.log(decodedToken)
+
+                
                 
             },
             error: function (error) {
