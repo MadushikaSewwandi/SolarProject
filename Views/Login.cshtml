@@ -3,34 +3,46 @@
 @{
 	Layout = "Master.cshtml";
 }
-	<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<h3 class="breadcrumb-header">Regular Page</h3>
-						<ul class="breadcrumb-tree">
-							<li><a href="#">Home</a></li>
-							<li class="active">Blank</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
-
-		<!-- SECTION -->
+<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
 				<!-- row -->
 				<div class="row">
-				    @await Umbraco.RenderMacroAsync("Login")
-				    
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Login</h3>
+							</div>
+					    <form name="sentMessage" id="LoginForm" novalidate="novalidate">
+							<div class="form-group">
+								<input class="input" type="email" id="email" placeholder="Email">
+							</div>
+							<div class="form-group">
+								<input class="input" type="password" id="password" placeholder="password">
+							</div>
+							<div class="form-group">
+								<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="LoginButton">Login</button>
+							</div>
+						</form>
+							
+						</div>
+						<!-- /Billing Details -->
+
+						
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 ">
+						
+						<img src="@Url.Content("~/img/solar5.jpg")" alt="" height="600px" width="500px">
+						
+						
+						
+					</div>
+					<!-- /Order Details -->
 				</div>
 				<!-- /row -->
 			</div>

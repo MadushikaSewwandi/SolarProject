@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Umbraco.Cms.Infrastructure.Mail;
+using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Email;
 using EmailSender = UmbracoSolarProject1.Email.EmailSender;
 
@@ -37,9 +39,9 @@ namespace UmbracoSolarProject1
 
 			// Register the EmailSender service
 			services.AddSingleton<EmailSender>();
+			services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("umbracoDbDSN")));
 
-			// Other services and dependencies can be added here
-			// ...
+			
 
 		}
 
@@ -66,6 +68,7 @@ namespace UmbracoSolarProject1
 			{
 				endpoints.MapControllers();
 			});
+			app.UseAuthentication();
 		}
 	}
 }
