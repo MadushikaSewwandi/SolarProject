@@ -5,12 +5,12 @@ using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-
-
+using Org.BouncyCastle.Bcpg;
+using Umbraco.Cms.Core.Models.Membership;
 
 namespace UmbracoSolarProject1.Controllers
 {
-	[Authorize]
+	
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AddtoCartController : ControllerBase
@@ -29,46 +29,23 @@ namespace UmbracoSolarProject1.Controllers
 
 		[HttpPost]
 		[Route("AddItem")]
-		public async Task<IActionResult> AddItem([FromBody] CartItem item,string Id)
+		public async Task<IActionResult> AddItem([FromBody] CartItem item)
 		{
 			try
 			{
 				
-				// Save the cart item details along with the user ID to the database
-				var cartItem = new CartItem
-				{
-					Id=Id,
-					ProductName = item.ProductName,
-					ProductPrice = item.ProductPrice,
-					ProductThumbnail = item.ProductThumbnail,
-					Quantity = item.Quantity,
-					ProductLink = item.ProductLink
-				};
 
-				// Find if the item is already in the cart for the logged-in user
-				var existingCartItem = _authContext.CartItems
-					.FirstOrDefault(i => i.ProductName == item.ProductName );
+				// Add the item to the context and save changes to the database
+				await _authContext.CartItems.AddAsync(item);
+				await _authContext.SaveChangesAsync();
 
-				if (existingCartItem != null)
-				{
-					// If the item is already in the cart, update its quantity
-					existingCartItem.Quantity += item.Quantity;
-				}
-				else
-				{
-					// If the item is not in the cart, add it as a new item
-					
-					_authContext.CartItems.Add(cartItem);
-				}
-
-				_authContext.SaveChanges();
-
-				return Ok(new { message = "Item added to the cart successfully." });
+				// Return a success response
+				return Ok(new { Message = "Item added to the cart successfully." });
 			}
 			catch (Exception ex)
 			{
 				// Handle any exceptions that occur during cart item addition
-				return BadRequest(new { message = "Error adding item to cart: " + ex.Message });
+				return BadRequest(new { Message = "Error adding item to cart: " + ex.Message });
 			}
 		}
 

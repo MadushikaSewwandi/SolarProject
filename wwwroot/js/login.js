@@ -21,19 +21,16 @@ $(document).ready(function () {
             data: JSON.stringify(formData), 
             contentType: "application/json",
             success: function (response) {
-                
-                 console.log(response);
+                debugger
+                console.log("Success function is executed.");
+                console.log(response);
                 localStorage.setItem("token", response.token);
-                console.log(localStorage.getItem("token"));
-                var decodedToken = jwt.decode(token);
-                console.log(decodedToken)
-
-                
-                
+                console.log("Token stored in local storage.");
             },
+            
             error: function (error) {
                 
-                window.location.href = '/Login'; 
+                window.location.href = '/'; 
             }
         });
     

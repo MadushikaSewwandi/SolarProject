@@ -11,8 +11,8 @@ using UmbracoSolarProject1.Data;
 namespace UmbracoSolarProject1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230730122451_changeaddcarttablecolumn")]
-    partial class changeaddcarttablecolumn
+    [Migration("20230731063104_initial")]
+    partial class initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,11 +26,8 @@ namespace UmbracoSolarProject1.Migrations
 
             modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ProductLink")
                         .IsRequired()
@@ -40,8 +37,8 @@ namespace UmbracoSolarProject1.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("ProductPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<int>("ProductPrice")
+                        .HasColumnType("int");
 
                     b.Property<string>("ProductThumbnail")
                         .IsRequired()

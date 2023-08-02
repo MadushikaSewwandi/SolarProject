@@ -15,8 +15,7 @@ namespace UmbracoSolarProject1.Data
 		{
 			base.OnModelCreating(builder);
 
-			builder.Entity<CartItem>().HasKey(c => c.Id);
-
+			
 			
 			
 

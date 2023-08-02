@@ -5,25 +5,30 @@
 namespace UmbracoSolarProject1.Migrations
 {
     /// <inheritdoc />
-    public partial class changeaddcarttable : Migration
+    public partial class changedatatypeofproducttype : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<string>(
-                name: "UserId",
+            migrationBuilder.AlterColumn<string>(
+                name: "ProductPrice",
                 table: "CartItems",
                 type: "nvarchar(max)",
                 nullable: false,
-                defaultValue: "");
+                oldClrType: typeof(int),
+                oldType: "int");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "UserId",
-                table: "CartItems");
+            migrationBuilder.AlterColumn<int>(
+                name: "ProductPrice",
+                table: "CartItems",
+                type: "int",
+                nullable: false,
+                oldClrType: typeof(string),
+                oldType: "nvarchar(max)");
         }
     }
 }

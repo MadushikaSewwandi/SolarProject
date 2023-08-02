@@ -50,7 +50,7 @@ namespace UmbracoSolarProject1.Controllers
 
 		[HttpPost]
 		[Route("Login")]
-		public async Task<IActionResult> Login([FromBody] Login model,)
+		public async Task<IActionResult> Login([FromBody] Login model)
 		{
 			try
 			{
