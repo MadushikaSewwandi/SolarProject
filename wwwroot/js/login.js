@@ -14,6 +14,8 @@ $(document).ready(function () {
 
         // Log the form data to the console
         console.log(formData);
+        console.log(formData);
+
 
         $.ajax({
             url: "/api/Authentication/Login",
