@@ -50,7 +50,7 @@ namespace UmbracoSolarProject1.Controllers
 
 		[HttpPost]
 		[Route("Login")]
-		public async Task<IActionResult> Login([FromBody] Login model,)
+		public async Task<IActionResult> Login([FromBody] Login model)
 		{
 			try
 			{
@@ -79,15 +79,34 @@ namespace UmbracoSolarProject1.Controllers
 					signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
 
 				);
+                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-				return Ok(new
+                // Decode the token to access claims, including 'id'
+                var jwtTokenHandler = new JwtSecurityTokenHandler();
+                var jwtToken = jwtTokenHandler.ReadJwtToken(tokenString);
+
+                // Extract 'id' from claims
+                var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+
+                // Return the token, expiration, and userId
+                return Ok(new
+                {
+                    token = tokenString,
+                    expiration = token.ValidTo,
+                    id = user.Id,
+                    firstName = user.FirstName,
+                    lastName = user.LastName
+                });
+
+
+              /*  return Ok(new
 				{
 					token = new JwtSecurityTokenHandler().WriteToken(token),
 					expiration = token.ValidTo,
 					id = user.Id,
 					firstName = user.FirstName,
 					lastName = user.LastName
-				});
+				});*/
 			}
 			catch (Exception ex)
 			{
