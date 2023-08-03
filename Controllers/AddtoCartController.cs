@@ -1,29 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Org.BouncyCastle.Bcpg;
-using Umbraco.Cms.Core.Models.Membership;
+using Microsoft.EntityFrameworkCore;
 
 namespace UmbracoSolarProject1.Controllers
 {
-	
+	[Authorize]
 	[Route("api/[controller]")]
 	[ApiController]
 	public class AddtoCartController : ControllerBase
 	{
-		private readonly IConfiguration _configuration;
-		private readonly UmbracoSolarProject1.Email.EmailSender _emailSender;
 		private readonly AppDbContext _authContext;
 
-		public AddtoCartController(AppDbContext dataContext,IConfiguration configuration, UmbracoSolarProject1.Email.EmailSender emailSender)
+		public AddtoCartController(AppDbContext dataContext)
 		{
-
-			_configuration = configuration;
-			_emailSender = emailSender;
 			_authContext = dataContext;
 		}
 
@@ -33,19 +25,45 @@ namespace UmbracoSolarProject1.Controllers
 		{
 			try
 			{
-				
+				// Create a new CartItem entity and set its properties
+				var cartItem = new CartItem
+				{
+					UserId = item.UserId,
+					ProductName = item.ProductName,
+					ProductPrice = item.ProductPrice,
+					Quantity = item.Quantity,
+					ProductThumbnail = item.ProductThumbnail,
+					ProductLink = item.ProductLink
+				};
 
-				// Add the item to the context and save changes to the database
-				await _authContext.CartItems.AddAsync(item);
+				// Add the new CartItem entity to the CartItems DbSet
+				_authContext.CartItems.Add(cartItem);
+
+				// Save changes to the database
 				await _authContext.SaveChangesAsync();
 
-				// Return a success response
-				return Ok(new { Message = "Item added to the cart successfully." });
+				return Ok("Item added to cart successfully.");
 			}
 			catch (Exception ex)
 			{
-				// Handle any exceptions that occur during cart item addition
-				return BadRequest(new { Message = "Error adding item to cart: " + ex.Message });
+				return BadRequest("Error: " + ex.Message);
+			}
+		}
+
+		[HttpGet]
+		[Route("GetCartItemsByUserId/{userId}")]
+		public async Task<IActionResult> GetCartItemsByUserId(int userId)
+		{
+			try
+			{
+				// Retrieve cart items from the database for the specified user ID
+				var cartItems = await _authContext.CartItems.Where(c => c.UserId == userId).ToListAsync();
+
+				return Ok(cartItems);
+			}
+			catch (Exception ex)
+			{
+				return BadRequest("Error: " + ex.Message);
 			}
 		}
 

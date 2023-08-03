@@ -7,6 +7,10 @@ using Umbraco.Cms.Infrastructure.Mail;
 using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Email;
 using EmailSender = UmbracoSolarProject1.Email.EmailSender;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 
 namespace UmbracoSolarProject1
@@ -41,11 +45,30 @@ namespace UmbracoSolarProject1
 			services.AddSingleton<EmailSender>();
 			services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("umbracoDbDSN")));
 
-			
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+		   .AddJwtBearer(options =>
+		   {
+			   options.SaveToken = true;
+			   options.RequireHttpsMetadata = true;
+			   options.TokenValidationParameters = new TokenValidationParameters()
+			   {
+				   ValidateIssuer = true,
+				   ValidateAudience = false,
+				   ValidAudience = Configuration["Jwt:Audience"],
+				   ValidIssuer = Configuration["Jwt:Issuer"],
+				   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+			   };
+		   }
+		   );
 
 		}
 
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env,AppDbContext context)
 		{
 			if (env.IsDevelopment())
 			{
@@ -68,7 +91,9 @@ namespace UmbracoSolarProject1
 			{
 				endpoints.MapControllers();
 			});
+			app.UseRouting();
 			app.UseAuthentication();
+			app.UseAuthorization();
 		}
 	}
 }

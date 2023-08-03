@@ -11,6 +11,7 @@ using System.Text;
 using Umbraco.Cms.Core.Models.Membership;
 using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Models;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace UmbracoSolarProject1.Controllers
 {
@@ -69,6 +70,10 @@ namespace UmbracoSolarProject1.Controllers
 					return BadRequest("Password is incorrect.");
 				}
 
+				var claims = new List<Claim>
+					{
+						new Claim("UserId", user.Id.ToString())
+					};
 
 				// Create a new JWT token
 				var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
@@ -76,6 +81,7 @@ namespace UmbracoSolarProject1.Controllers
 					issuer: _configuration["JWT:Issuer"],
 					audience: _configuration["JWT:Audience"],
 					expires: DateTime.Now.AddHours(3),
+					claims: claims,
 					signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
 
 				);
