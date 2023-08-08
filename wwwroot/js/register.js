@@ -23,9 +23,11 @@ $(document).ready(function () {
             success: function (response) {
                 // Optionally, you can handle the success response here
                 console.log("User registered successfully!");
+                alert("User registered successfully!");
                 console.log(response); // If your controller returns a message like "User registered successfully!", you can log it here.
                 // Optionally, you can redirect the user to another page after successful registration.
                 // window.location.href = '/success'; // Replace '/success' with the URL of the success page.
+                window.location.href="/";
             },
             error: function (error) {
                 // Optionally, you can handle the error response here

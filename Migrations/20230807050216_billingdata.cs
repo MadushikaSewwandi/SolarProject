@@ -5,7 +5,7 @@
 namespace UmbracoSolarProject1.Migrations
 {
     /// <inheritdoc />
-    public partial class changeaddcarttablecolumn : Migration
+    public partial class billingdata : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -2,7 +2,7 @@ $(document).ready(function () {
     
     $("#LoginForm").submit(function (event) {
         console.log("your logging....!")
-
+        
         // Prevent the default form submission behavior
         event.preventDefault();
 
@@ -24,12 +24,14 @@ $(document).ready(function () {
             contentType: "application/json",
             success: function (response) {
                 
-                 console.log(response);
+                console.log(response);
+                console.log("below is Email")
+                console.log(response.id);
                 localStorage.setItem("token", response.token);
+                localStorage.setItem("user", JSON.stringify(response));
                 console.log(localStorage.getItem("token"));
-                var decodedToken = jwt.decode(token);
-                console.log(decodedToken)
-
+                
+                window.location.href = '/';
                 
                 
             },

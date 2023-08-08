@@ -5,26 +5,23 @@
 namespace UmbracoSolarProject1.Migrations
 {
     /// <inheritdoc />
-    public partial class addcarttable : Migration
+    public partial class rating : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "CartItems",
+                name: "Rating",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    ProductThumbnail = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ProductLink = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ProductID = table.Column<int>(type: "int", nullable: false),
+                    RatingValue = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItems", x => x.Id);
+                    table.PrimaryKey("PK_Rating", x => x.Id);
                 });
         }
 
@@ -32,7 +29,7 @@ namespace UmbracoSolarProject1.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "CartItems");
+                name: "Rating");
         }
     }
 }

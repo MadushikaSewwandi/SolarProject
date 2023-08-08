@@ -73,12 +73,15 @@ namespace UmbracoSolarProject1.Controllers
 				// Create a new JWT token
 				var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
 				var token = new JwtSecurityToken(
-					issuer: _configuration["JWT:Issuer"],
+                    
+                    issuer: _configuration["JWT:Issuer"],
 					audience: _configuration["JWT:Audience"],
-					expires: DateTime.Now.AddHours(3),
-					signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                    expires: DateTime.Now.AddHours(3),
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                    
 
-				);
+
+                );
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
                 // Decode the token to access claims, including 'id'
@@ -86,7 +89,11 @@ namespace UmbracoSolarProject1.Controllers
                 var jwtToken = jwtTokenHandler.ReadJwtToken(tokenString);
 
                 // Extract 'id' from claims
-                var userId = jwtToken.Claims.FirstOrDefault(c => c.Type == "id")?.Value;
+                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "id");
+                var userId = userIdClaim?.Value;
+
+
+
 
                 // Return the token, expiration, and userId
                 return Ok(new

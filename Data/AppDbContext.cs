@@ -11,18 +11,24 @@ namespace UmbracoSolarProject1.Data
 
 		}
 
-		protected override void OnModelCreating(ModelBuilder builder)
-		{
-			base.OnModelCreating(builder);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-			builder.Entity<CartItem>().HasKey(c => c.Id);
+            builder.Entity<CartItem>()
+           .HasOne(c => c.Register)      // Cart has one Register
+                 .WithMany()                   // Register has many Carts
+                 .HasForeignKey(c => c.UserId)  // Define the foreign key property
+                 .OnDelete(DeleteBehavior.Cascade);
 
-			
-			
 
-		}
 
-		public DbSet<Register> Register { get; set; }
+        }
+
+        public DbSet<Register> Register { get; set; }
 		public DbSet<CartItem> CartItems { get; set; }
-	}
+
+        public DbSet<Rating> Rating { get; set; }
+        public DbSet<BillingDetail> BillingDetail { get; set; }
+    }
 }

@@ -1,16 +1,28 @@
 $(document).ready(function () {
- 
-        $("#addToCartBtn").on("click", function ()
     
+ 
+        $("#placeorderbtn").on("click", function ()
 {
-          console.log("add to cart");
-          debugger;
-      
-          before before before before 
-          var productPrice = $("#productPrice").val();
-          var productThumbnail = $("#productThumbnail").val();
-          var quantity = parseInt($("#quantityInput").val());
-          var productLink = $("#quantityInput").data("product-url");
+          
+          
+      debugger;
+            
+        // Get the values from the form fields
+        var address = document.getElementById("address").value;
+        var city = document.getElementById("city").value;
+        var country = document.getElementById("country").value;
+        var zipcode = document.getElementById("zipcode").value;
+        
+      
+        // Print the form values to the console
+        console.log("Address: " + address);
+        console.log("City: " + city);
+        console.log("Country: " + country);
+        console.log("ZIP Code: " + zipcode);
+        
+  
+            
+          
       
           // Get user data from localStorage
           var user = localStorage.getItem("user");
@@ -22,19 +34,19 @@ $(document).ready(function () {
             var item = {
               
                 UserId:userId,
-                ProductName: productName,
-                ProductPrice: parseFloat(productPrice),
-                ProductThumbnail: productThumbnail,
-                Quantity: parseInt(quantity),
-                ProductLink: productLink,
+                Address: address,
+                City: city,
+                Country: country,
+                ZipCode: zipcode,
+                
               
             };
             console.log(item)
       
             // Make an AJAX POST request to add the item to the cart
-            $.ajax({
+           $.ajax({
               type: "POST",
-              url: "/api/AddtoCart/AddItem",
+              url: "/api/GetBillingDetails/AddBillingDetail",
               data: JSON.stringify(item),
               contentType: "application/json",
               headers: {

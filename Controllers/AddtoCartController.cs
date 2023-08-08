@@ -1,76 +1,71 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-
-
+using Microsoft.EntityFrameworkCore;
 
 namespace UmbracoSolarProject1.Controllers
 {
-	[Authorize]
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AddtoCartController : ControllerBase
-	{
-		private readonly IConfiguration _configuration;
-		private readonly UmbracoSolarProject1.Email.EmailSender _emailSender;
-		private readonly AppDbContext _authContext;
+    [Authorize]
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AddtoCartController : ControllerBase
+    {
+        private readonly AppDbContext _authContext;
 
-		public AddtoCartController(AppDbContext dataContext,IConfiguration configuration, UmbracoSolarProject1.Email.EmailSender emailSender)
-		{
+        public AddtoCartController(AppDbContext dataContext)
+        {
+            _authContext = dataContext;
+        }
 
-			_configuration = configuration;
-			_emailSender = emailSender;
-			_authContext = dataContext;
-		}
+        [HttpPost]
+        [Route("AddItem")]
+        public async Task<IActionResult> AddItem([FromBody] CartItem item)
+        {
+            try
+            {
+                // Create a new CartItem entity and set its properties
+                var cartItem = new CartItem
+                {
+                    UserId = item.UserId,
+                    ProductName = item.ProductName,
+                    ProductPrice = item.ProductPrice,
+                    Quantity = item.Quantity,
+                    ProductThumbnail = item.ProductThumbnail,
+                    ProductLink = item.ProductLink
+                };
 
-		[HttpPost]
-		[Route("AddItem")]
-		public async Task<IActionResult> AddItem([FromBody] CartItem item,string Id)
-		{
-			try
-			{
-				
-				// Save the cart item details along with the user ID to the database
-				var cartItem = new CartItem
-				{
-					Id=Id,
-					ProductName = item.ProductName,
-					ProductPrice = item.ProductPrice,
-					ProductThumbnail = item.ProductThumbnail,
-					Quantity = item.Quantity,
-					ProductLink = item.ProductLink
-				};
+                // Add the new CartItem entity to the CartItems DbSet
+                _authContext.CartItems.Add(cartItem);
 
-				// Find if the item is already in the cart for the logged-in user
-				var existingCartItem = _authContext.CartItems
-					.FirstOrDefault(i => i.ProductName == item.ProductName );
+                // Save changes to the database
+                await _authContext.SaveChangesAsync();
 
-				if (existingCartItem != null)
-				{
-					// If the item is already in the cart, update its quantity
-					existingCartItem.Quantity += item.Quantity;
-				}
-				else
-				{
-					// If the item is not in the cart, add it as a new item
-					
-					_authContext.CartItems.Add(cartItem);
-				}
+                return Ok("Item added to cart successfully.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message);
+            }
+        }
 
-				_authContext.SaveChanges();
+        [HttpGet]
+        [Route("GetCartItemsByUserId/{userId}")]
+        public async Task<IActionResult> GetCartItemsByUserId(int userId)
+        {
+            try
+            {
+                // Retrieve cart items from the database for the specified user ID
+                var cartItems = await _authContext.CartItems.Where(c => c.UserId == userId).ToListAsync();
 
-				return Ok(new { message = "Item added to the cart successfully." });
-			}
-			catch (Exception ex)
-			{
-				// Handle any exceptions that occur during cart item addition
-				return BadRequest(new { message = "Error adding item to cart: " + ex.Message });
-			}
-		}
+                return Ok(cartItems);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error: " + ex.Message);
+            }
+        }
 
-	}
+    }
 }
