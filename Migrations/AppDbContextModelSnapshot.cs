@@ -80,6 +80,7 @@ namespace UmbracoSolarProject1.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("int");
+<<<<<<< HEAD
 
                     b.HasKey("Id");
 
@@ -114,6 +115,14 @@ namespace UmbracoSolarProject1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Rating");
+=======
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("CartItems");
+>>>>>>> 00b850c98c6009f4be022f430b2c7e4b286586e5
                 });
 
             modelBuilder.Entity("UmbracoSolarProject1.Models.Register", b =>
@@ -144,6 +153,7 @@ namespace UmbracoSolarProject1.Migrations
                     b.ToTable("Register");
                 });
 
+<<<<<<< HEAD
             modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
                 {
                     b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
@@ -153,6 +163,8 @@ namespace UmbracoSolarProject1.Migrations
                     b.Navigation("Register");
                 });
 
+=======
+>>>>>>> 00b850c98c6009f4be022f430b2c7e4b286586e5
             modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
                 {
                     b.HasOne("UmbracoSolarProject1.Models.Register", "Register")

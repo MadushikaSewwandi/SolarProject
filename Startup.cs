@@ -45,6 +45,7 @@ namespace UmbracoSolarProject1
             services.AddSingleton<EmailSender>();
             services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("umbracoDbDSN")));
 
+<<<<<<< HEAD
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -65,9 +66,32 @@ namespace UmbracoSolarProject1
                };
            }
            );
+=======
+			services.AddAuthentication(options =>
+			{
+				options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+			})
+		   .AddJwtBearer(options =>
+		   {
+			   options.SaveToken = true;
+			   options.RequireHttpsMetadata = true;
+			   options.TokenValidationParameters = new TokenValidationParameters()
+			   {
+				   ValidateIssuer = true,
+				   ValidateAudience = false,
+				   ValidAudience = Configuration["Jwt:Audience"],
+				   ValidIssuer = Configuration["Jwt:Issuer"],
+				   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+			   };
+		   }
+		   );
+>>>>>>> 00b850c98c6009f4be022f430b2c7e4b286586e5
 
         }
 
+<<<<<<< HEAD
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context)
         {
             if (env.IsDevelopment())
@@ -97,3 +121,34 @@ namespace UmbracoSolarProject1
         }
     }
 }
+=======
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env,AppDbContext context)
+		{
+			if (env.IsDevelopment())
+			{
+				app.UseDeveloperExceptionPage();
+			}
+
+			app.UseUmbraco()
+				.WithMiddleware(u =>
+				{
+					u.UseBackOffice();
+					u.UseWebsite();
+				})
+				.WithEndpoints(u =>
+				{
+					u.UseInstallerEndpoints();
+					u.UseBackOfficeEndpoints();
+					u.UseWebsiteEndpoints();
+				});
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+			});
+			app.UseRouting();
+			app.UseAuthentication();
+			app.UseAuthorization();
+		}
+	}
+}
+>>>>>>> 00b850c98c6009f4be022f430b2c7e4b286586e5

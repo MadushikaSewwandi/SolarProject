@@ -12,13 +12,8 @@ using UmbracoSolarProject1.Data;
 namespace UmbracoSolarProject1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-<<<<<<<< HEAD:Migrations/20230803032025_initial.Designer.cs
-    [Migration("20230803032025_initial")]
-    partial class initial
-========
-    [Migration("20230802182900_adduseridtocart")]
-    partial class adduseridtocart
->>>>>>>> 00b850c98c6009f4be022f430b2c7e4b286586e5:Migrations/20230802182900_adduseridtocart.Designer.cs
+    [Migration("20230802175535_initials")]
+    partial class initials
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,6 +34,7 @@ namespace UmbracoSolarProject1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ProductLink")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductName")
@@ -53,12 +49,7 @@ namespace UmbracoSolarProject1.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("CartItems");
                 });
@@ -89,17 +80,6 @@ namespace UmbracoSolarProject1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Register");
-                });
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
-                {
-                    b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Register");
                 });
 #pragma warning restore 612, 618
         }

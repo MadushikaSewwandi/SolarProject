@@ -14,8 +14,13 @@
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.7" />
     <PackageReference Include="Microsoft.NET.StringTools" Version="17.4.0" />
+<<<<<<< HEAD
 	  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.0-preview" />
+=======
+	 <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.11" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="6.32.1" />
+>>>>>>> 00b850c98c6009f4be022f430b2c7e4b286586e5
     <PackageReference Include="Umbraco.Cms" Version="12.0.1" />
   </ItemGroup>
 
