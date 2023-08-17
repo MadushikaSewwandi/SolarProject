@@ -1,3 +1,18 @@
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Umbraco.Cms.Infrastructure.Mail;
+using UmbracoSolarProject1.Data;
+using UmbracoSolarProject1.Email;
+using EmailSender = UmbracoSolarProject1.Email.EmailSender;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+
+
 namespace UmbracoSolarProject1
 {
     public class Startup
@@ -5,44 +20,55 @@ namespace UmbracoSolarProject1
         private readonly IWebHostEnvironment _env;
         private readonly IConfiguration _config;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Startup" /> class.
-        /// </summary>
-        /// <param name="webHostEnvironment">The web hosting environment.</param>
-        /// <param name="config">The configuration.</param>
-        /// <remarks>
-        /// Only a few services are possible to be injected here https://github.com/dotnet/aspnetcore/issues/9337.
-        /// </remarks>
-        public Startup(IWebHostEnvironment webHostEnvironment, IConfiguration config)
+        public Startup(IConfiguration configuration, IWebHostEnvironment webHostEnvironment)
         {
-            _env = webHostEnvironment ?? throw new ArgumentNullException(nameof(webHostEnvironment));
-            _config = config ?? throw new ArgumentNullException(nameof(config));
+            Configuration = configuration;
+            _env = webHostEnvironment;
         }
 
-        /// <summary>
-        /// Configures the services.
-        /// </summary>
-        /// <param name="services">The services.</param>
-        /// <remarks>
-        /// This method gets called by the runtime. Use this method to add services to the container.
-        /// For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940.
-        /// </remarks>
+        public IConfiguration Configuration { get; }
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddUmbraco(_env, _config)
-                .AddBackOffice()
-                .AddWebsite()
-                .AddDeliveryApi()
-                .AddComposers()
-                .Build();
+            services.AddUmbraco(_env, Configuration)
+              .AddBackOffice()
+              .AddWebsite()
+              .AddDeliveryApi()
+              .AddComposers()
+              .Build();
+
+            // Register the email configuration from appsettings.json
+            var emailConfig = Configuration.GetSection("EmailConfiguration").Get<EmailConfigurations>();
+            services.AddSingleton(emailConfig);
+
+            // Register the EmailSender service
+            services.AddSingleton<EmailSender>();
+            services.AddDbContext<AppDbContext>(options =>options.UseSqlServer(Configuration.GetConnectionString("umbracoDbDSN")));
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+           .AddJwtBearer(options =>
+           {
+               options.SaveToken = true;
+               options.RequireHttpsMetadata = true;
+               options.TokenValidationParameters = new TokenValidationParameters()
+               {
+                   ValidateIssuer = true,
+                   ValidateAudience = false,
+                   ValidAudience = Configuration["Jwt:Audience"],
+                   ValidIssuer = Configuration["Jwt:Issuer"],
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+               };
+           }
+           );
+
         }
 
-        /// <summary>
-        /// Configures the application.
-        /// </summary>
-        /// <param name="app">The application builder.</param>
-        /// <param name="env">The web hosting environment.</param>
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AppDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -50,17 +76,24 @@ namespace UmbracoSolarProject1
             }
 
             app.UseUmbraco()
-                .WithMiddleware(u =>
-                {
-                    u.UseBackOffice();
-                    u.UseWebsite();
-                })
-                .WithEndpoints(u =>
-                {
-                    u.UseInstallerEndpoints();
-                    u.UseBackOfficeEndpoints();
-                    u.UseWebsiteEndpoints();
-                });
+              .WithMiddleware(u =>
+              {
+                  u.UseBackOffice();
+                  u.UseWebsite();
+              })
+              .WithEndpoints(u =>
+              {
+                  u.UseInstallerEndpoints();
+                  u.UseBackOfficeEndpoints();
+                  u.UseWebsiteEndpoints();
+              });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+            app.UseRouting();
+            app.UseAuthentication();
+            app.UseAuthorization();
         }
     }
 }

@@ -1,0 +1,63 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "Master.cshtml";
+}
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Login</h3>
+							</div>
+					    <form name="sentMessage" id="LoginForm" novalidate="novalidate">
+							<div class="form-group">
+								<input class="input" type="email" id="email" placeholder="Email">
+							</div>
+							<div class="form-group">
+								<input class="input" type="password" id="password" placeholder="password">
+							</div>
+							<div class="form-group">
+								<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="LoginButton">Login</button>
+							</div>
+							
+							 <div class="margin-top margin-small">
+                        <div class="text-align-center">
+                            <a href="/forgetpassword">Forgot your password?</a>
+                        </div>
+                    </div>
+                    <div class="margin-top margin-xsmall">
+                        <div class="text-align-center">Don&#x27;t have an account? <a href="/register"
+                                class="text-style-link">Sign up</a>
+                        </div>
+                    </div>
+					
+						</form>
+							
+						</div>
+						<!-- /Billing Details -->
+
+						
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 ">
+						
+						<img src="@Url.Content("~/img/solar5.jpg")" alt="" height="600px" width="500px">
+						
+						
+						
+					</div>
+					<!-- /Order Details -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->

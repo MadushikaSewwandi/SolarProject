@@ -1,0 +1,64 @@
+﻿@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@using Umbraco.Cms.Core
+@using Umbraco.Cms.Core.Models.PublishedContent
+@using Umbraco.Cms.Core.Routing
+@using Umbraco.Extensions
+
+@inject IPublishedValueFallback PublishedValueFallback
+@inject IPublishedUrlProvider PublishedUrlProvider
+
+@{
+    var selection = Model.Root().Children.Where(x => x.IsVisible(PublishedValueFallback)).ToArray();
+    var renderedLinks = new List<string>();
+}
+
+@if (selection?.Length > 0)
+{
+    <nav id="navigation">
+        <div class="container">
+            <div id="responsive-nav">
+                <a class="navbar-brand font-weight-bold" href="/">
+                    <ul class="main-nav nav navbar-nav">
+                        @foreach (var item in selection)
+                        {
+                            var hideFromNavigation = item.Value<bool>("hideFromNavigation");
+                            if (!hideFromNavigation && !renderedLinks.Contains(item.Name))
+                            {
+                                if (item.Name == "About Us")
+                                {
+                                    <li class="@(item.IsAncestorOrSelf(Model) ? "current" : null)">
+                                        <a href="javascript:void(0);" onclick="scroll_to_AboutUs()">@item.Name</a>
+                                    </li>
+                                }
+                                else if (item.Name == "Contact Us")
+                                {
+                                    <li class="@(item.IsAncestorOrSelf(Model) ? "current" : null)">
+                                        <a href="javascript:void(0);" onclick="scroll_to_ContactUs()">@item.Name</a>
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li class="@(item.IsAncestorOrSelf(Model) ? "current" : null)">
+                                        <a href="@item.Url(PublishedUrlProvider)">@item.Name</a>
+                                    </li>
+                                }
+                                renderedLinks.Add(item.Name);
+                            }
+                        }
+                    </ul>
+                </a>
+            </div>
+        </div>
+    </nav>
+}
+
+<!-- JavaScript functions for scrolling to About Us and Contact Us -->
+<script>
+    function scroll_to_AboutUs() {
+        // Your code to scroll to the "About Us" section goes here
+    }
+
+    function scroll_to_ContactUs() {
+        // Your code to scroll to the "Contact Us" section goes here
+    }
+</script>

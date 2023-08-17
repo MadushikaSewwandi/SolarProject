@@ -5,27 +5,7 @@
 	Layout = "Master.cshtml";
 }
 
-<!-- BREADCRUMB -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="#">Home</a></li>
-							<li><a href="#">All Categories</a></li>
-							<li><a href="#">Accessories</a></li>
-							<li><a href="#">Headphones</a></li>
-							<li class="active">Product name goes here</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /BREADCRUMB -->
+
 
 		<!-- SECTION -->
 		<div class="section">
@@ -58,19 +38,23 @@
 						</div>
 					</div>
 					<!-- /Product thumb imgs -->
+					
 
 					<!-- Product details -->
 					<div class="col-md-5">
 						<div class="product-details">
 							<h2 class="product-name">@Model.Value("productName")</h2>
 							<div>
-								<div class="product-rating">
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star"></i>
-									<i class="fa fa-star-o"></i>
-								</div>
+							<div class="rating-box" id="rating-box">
+							<!-- #region -->
+							<div class="rating-stars">
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star"></i>
+														<i class="fa fa-star-o"></i>
+							</div>
+							</div>
 								<a class="review-link" href="#">10 Review(s) | Add your review</a>
 							</div>
 							<div>
@@ -83,29 +67,38 @@
 								
 								
 							</div>
+							
 
 							<div class="add-to-cart">
-								<div class="qty-label">
-									<b>Quantity</b>
-									<div class="input-number">
-										<input type="number">
-										<span class="qty-up">+</span>
-										<span class="qty-down">-</span>
-									</div>
-								</div>
-								<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-							</div>
+                                <div class="qty-label">
+                                    <b>Quantity</b>
+                                    <div class="input-number">
+                                        <input type="number" id="quantityInput" data-product-url="@Model.Url()">
+                                    
+                                        <input type="hidden" id="productName" value="@Model.Value("productName")"/>
+                                        <input type="hidden" id="productPrice" value="@Model.Value("price")"/>
+                                         
+                                            @{
+                                                var thumbnailImage = Model.Value<IEnumerable<IPublishedContent>>("images").FirstOrDefault();
+                                                
+                                            }
+                                            <input type="hidden" id="productThumbnail" value="@thumbnailImage?.Url()" />
+                                           
+                                     
+                                        <span class="qty-up">+</span>
+                                        <span class="qty-down">-</span>
+                                    </div>
+                                </div>
+                              <button class="add-to-cart-btn" id="addToCartBtn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                            </div>
+							
 
 							<ul class="product-btns">
 								<li><a href="#"><i class="fa fa-heart-o"></i> add to wishlist</a></li>
-								<li><a href="#"><i class="fa fa-exchange"></i> add to compare</a></li>
+							
 							</ul>
 
-							<ul class="product-links">
-								<li>Category:</li>
-								<li><a href="#">Headphones</a></li>
-								<li><a href="#">Accessories</a></li>
-							</ul>
+							
 
 							<ul class="product-links">
 								<li>Share:</li>
@@ -118,6 +111,8 @@
 						</div>
 					</div>
 					<!-- /Product details -->
+					
+					
 
 					<!-- Product tab -->
 					<div class="col-md-12">
@@ -242,55 +237,11 @@
 										<!-- Reviews -->
 										<div class="col-md-6">
 											<div id="reviews">
-												<ul class="reviews">
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
+												<ul class="reviews" >
+													<li id="RatingsContainer">
+														
 													</li>
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
-													<li>
-														<div class="review-heading">
-															<h5 class="name">John</h5>
-															<p class="date">27 DEC 2018, 8:0 PM</p>
-															<div class="review-rating">
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star"></i>
-																<i class="fa fa-star-o empty"></i>
-															</div>
-														</div>
-														<div class="review-body">
-															<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua</p>
-														</div>
-													</li>
+													
 												</ul>
 												<ul class="reviews-pagination">
 													<li class="active">1</li>
@@ -307,9 +258,11 @@
 										<div class="col-md-3">
 											<div id="review-form">
 												<form class="review-form">
-													<input class="input" type="text" placeholder="Your Name">
-													<input class="input" type="email" placeholder="Your Email">
-													<textarea class="input" placeholder="Your Review"></textarea>
+													<input class="input" type="text" placeholder="Your Name" id="ratingName">
+													<input class="input" type="email" placeholder="Your Email" id="ratingEmail">
+													<textarea class="input" placeholder="Your Review" id="review"></textarea>
+													 <input type="hidden" id="productName2" value="@Model.Value("productName")"/>
+
 													<div class="input-rating">
 														<span>Your Rating: </span>
 														<div class="stars">
@@ -320,7 +273,7 @@
 															<input id="star1" name="rating" value="1" type="radio"><label for="star1"></label>
 														</div>
 													</div>
-													<button class="primary-btn">Submit</button>
+													<button class="primary-btn" id="addreview">Submit</button>
 												</form>
 											</div>
 										</div>
@@ -476,4 +429,6 @@
 			</div>
 			<!-- /container -->
 		</div>
+		<script src="https://cdn.jsdelivr.net/npm/jwt-decode@3.1.2/dist/jwt-decode.min.js"></script>
+
 		<!-- /Section -->
