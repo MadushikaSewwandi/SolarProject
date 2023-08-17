@@ -1,5 +1,4 @@
 $(document).ready(function () {
-
     $("#search-button").on("click", function (e) {
         e.preventDefault();
         var searchInput = $("#search-input").val().trim().toLowerCase();

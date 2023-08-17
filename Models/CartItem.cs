@@ -15,7 +15,8 @@ namespace UmbracoSolarProject1.Models
         public string? ProductThumbnail { get; set; }
         public string? ProductLink { get; set; }
 
-        public Register? Register { get; set; }
+       
     
+		
 	}
 }

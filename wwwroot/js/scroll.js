@@ -5,5 +5,3 @@ function scroll_to_AboutUs(){
 function scroll_to_ContactUs(){
     document.getElementById("newsletter").scrollIntoView();
 }
-
-// scroll.js

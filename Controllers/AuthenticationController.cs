@@ -11,123 +11,225 @@ using System.Text;
 using Umbraco.Cms.Core.Models.Membership;
 using UmbracoSolarProject1.Data;
 using UmbracoSolarProject1.Models;
+using static OpenIddict.Abstractions.OpenIddictConstants;
+using Umbraco.Cms.Core.Security;
+using Umbraco.Cms.Web.Common.Controllers;
+using Umbraco.Cms.Core.Services;
+using Umbraco.Cms.Core.Models;
+using Umbraco.Cms.Web.Common.Security;
+using SignInResult = Microsoft.AspNetCore.Identity.SignInResult;
+using System.Net;
+using System.Web;
 
 namespace UmbracoSolarProject1.Controllers
 {
-	[Route("api/[controller]")]
-	[ApiController]
-	public class AuthenticationController : ControllerBase
-	{
-		private readonly IConfiguration _configuration;
-		private readonly UmbracoSolarProject1.Email.EmailSender _emailSender;
-		private readonly AppDbContext _authContext;
+    [Route("api/[controller]")]
+    [ApiController]
+    public class AuthenticationController : UmbracoApiController
+    {
+        private readonly IConfiguration _configuration;
+        private readonly UmbracoSolarProject1.Email.EmailSender _emailSender;
+        private readonly AppDbContext _authContext;
+        private readonly IMemberManager _memberManager;
+        private readonly IMemberService _memberService;
+        private readonly IMemberTypeService _memberTypeService;
+        private readonly IMemberSignInManager _memberSignInManager;
 
 
-		public AuthenticationController(AppDbContext dataContext,IConfiguration configuration, UmbracoSolarProject1.Email.EmailSender emailSender)
-		{
 
-			_configuration = configuration;
-			_emailSender = emailSender;
-			_authContext = dataContext;
-		}
+        public AuthenticationController(AppDbContext dataContext, IConfiguration configuration, UmbracoSolarProject1.Email.EmailSender emailSender, IMemberManager memberManager, IMemberTypeService memberTypeService, IMemberService memberService, IMemberSignInManager memberSignInManager)
+        {
 
-		[HttpPost]
+            _configuration = configuration;
+            _emailSender = emailSender;
+            _authContext = dataContext;
+            _memberManager = memberManager;
+            _memberTypeService = memberTypeService;
+			_memberService = memberService;
+            _memberSignInManager = memberSignInManager;
+        }
+
+
+        [HttpPost]
 		[Route("Register")]
 		public async Task<IActionResult> Register([FromBody] Register model)
 		{
-			var existingUser = await _authContext.Register.FirstOrDefaultAsync(u => u.Email == model.Email);
-			if (existingUser != null)
-			{
-				return BadRequest("User with the provided email already exists.");
-			}
+            var memberTypeAlias = "Member";
 
+            // Retrieve the member type
+            var memberType = _memberTypeService.Get(memberTypeAlias);
 
+            if (memberType == null)
+            {
+                return BadRequest("Member type not found.");
+            }
 
-			await _authContext.Register.AddAsync(model);
-			await _authContext.SaveChangesAsync();
-			return Ok(new { Message = "User Succefully Rgistered" });
-		}
+            // Check if a member with the provided email already exists
+            var existingMember = _memberService.GetByEmail(model.Email);
+
+            if (existingMember != null)
+            {
+                return BadRequest("User with the provided email already exists.");
+            }
+
+            var identityUser = MemberIdentityUser.CreateNew(model.Email, model.Email, memberTypeAlias, isApproved: true);
+            IdentityResult identityResult = await _memberManager.CreateAsync(
+                identityUser,
+                model.Password);
+
+            var member = _memberService.GetByEmail(identityUser.Email);
+
+			member.SetValue("firstName", model.FirstName);
+            member.SetValue("lastName", model.LastName);
+            member.IsApproved = true;
+
+            // Save the member
+            _memberService.Save(member);
+
+            // Send registration email
+            SendSuccessfullyRegisteredEmail(model.Email, model.FirstName);
+
+            return Ok(new { Message = "User Successfully Registered" });
+        }
 
 		[HttpPost]
 		[Route("Login")]
 		public async Task<IActionResult> Login([FromBody] Login model)
 		{
-			try
-			{
+            
+                var user = await _memberManager.FindByNameAsync(model.Email);
 
-				// Find the user by email (or any unique identifier)
-				var user = await _authContext.Register.FirstOrDefaultAsync(u => u.Email == model.Email);
+                if (user == null)
+                {
+                    return BadRequest( "User doesn't exist.");
+                }
 
-				if (user == null)
-				{
-					return BadRequest("User doesn't exist.");
-				}
+                var passwordCorrect = await _memberManager.CheckPasswordAsync(user, model.Password);
 
-				// Verify the password (you need to implement the password hashing and verification logic here)
-				if (!VerifyPassword(model.Password, user.Password))
-				{
-					return BadRequest("Password is incorrect.");
-				}
+                if (!passwordCorrect)
+                {
+                    return BadRequest("Password is incorrect.");
+                }
+
+                
 
 
-				// Create a new JWT token
-				var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
-				var token = new JwtSecurityToken(
-                    
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
+
+                var token = new JwtSecurityToken(
                     issuer: _configuration["JWT:Issuer"],
-					audience: _configuration["JWT:Audience"],
+                    audience: _configuration["JWT:Audience"],
                     expires: DateTime.Now.AddHours(3),
                     signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-                    
-
-
                 );
-                var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
 
-                // Decode the token to access claims, including 'id'
-                var jwtTokenHandler = new JwtSecurityTokenHandler();
-                var jwtToken = jwtTokenHandler.ReadJwtToken(tokenString);
-
-                // Extract 'id' from claims
-                var userIdClaim = jwtToken.Claims.FirstOrDefault(c => c.Type == "id");
-                var userId = userIdClaim?.Value;
-
-
-
-
-                // Return the token, expiration, and userId
                 return Ok(new
                 {
-                    token = tokenString,
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
                     expiration = token.ValidTo,
                     id = user.Id,
-                    firstName = user.FirstName,
-                    lastName = user.LastName
+                    firstName = user.Name,
+                   
+
                 });
+            
+           
+
+        }
+
+        [HttpGet]
+        [Route("SendResetPwdLink")]
+        public async Task<Object> SendResetPwdLink(string email)
+        {
+            try
+            {
+               
+                MemberIdentityUser? user = await _memberManager.FindByEmailAsync(email);
+
+                if (user != null)
+                {
+                    var token = await _memberManager.GeneratePasswordResetTokenAsync(user);
+
+                    // email
+                    var webAppUrl = _configuration["WebApp:BaseURL"];
+
+                    var link = webAppUrl + string.Format("/reset-password/{0}/{1}", WebUtility.UrlEncode(user.Email), WebUtility.UrlEncode(token));
+                
+
+                    SendResetPasswordEmail(user.Email, link, user.Name, webAppUrl);
 
 
-              /*  return Ok(new
-				{
-					token = new JwtSecurityTokenHandler().WriteToken(token),
-					expiration = token.ValidTo,
-					id = user.Id,
-					firstName = user.FirstName,
-					lastName = user.LastName
-				});*/
-			}
-			catch (Exception ex)
-			{
-				return BadRequest("Error");
-			}
-		}
+                    return BadRequest("Email successfully sent."); 
+                }
+                else
+                {
+                    // error message
+                    return BadRequest("User doesn't exist.");
+                }
 
-		// Method to verify the password (you need to implement the password hashing and verification logic here)
-		private bool VerifyPassword(string enteredPassword, string hashedPassword)
+
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { Message = "Reset Email Successfully sent" });
+              
+            }
+        }
+
+        private bool SendResetPasswordEmail(string userEmail, string url, string firstName, string webAppUrl)
+        {
+
+
+            var rng = new Random();
+
+            var email = new EmailAddress();
+            email.Address = userEmail;
+            email.DisplayName = "Euulo";
+
+            var emails = new EmailAddress[1];
+            emails[0] = email;
+
+            var emailBody = EmailTemplates.RESET_PASSWORD.Replace("{{user}}", firstName).Replace("{{url}}", url).Replace("{{webUrl}}", webAppUrl); ;
+            var message = new EmailMessage(
+                            emails,
+                            "Reset Password",
+                            emailBody
+
+                        );
+            _emailSender.SendEmail(message);
+            return true;
+
+        }
+
+        private bool SendSuccessfullyRegisteredEmail(string userEmail, string firstName)
 		{
-			// Implement your password verification logic here (e.g., using BCrypt or any other secure hashing algorithm)
-			// Compare the hashedPassword with the enteredPassword after applying the same hashing algorithm.
-			return hashedPassword == enteredPassword;
+
+			var rng = new Random();
+
+
+			var email = new EmailAddress();
+			email.Address = userEmail;
+			email.DisplayName = "X-Solar";
+
+			var emails = new EmailAddress[1];
+			emails[0] = email;
+
+
+			var message = new EmailMessage(
+			   emails,
+			   "Thank you for registering your interest with ",
+			   EmailTemplates.SUCCESSFUL_FUNERAL_DIRECTOR_REGISTRATION.Replace("{{user}}", firstName)
+
+
+
+
+		   );
+
+			_emailSender.SendEmail(message);
+			return true;
+
 		}
+
 
 
 

@@ -247,6 +247,27 @@ x-solar.com</p>
                 </p>
             " + EMAIL_TAIL;
 
-		
-	}
+		public const string SUCCESSFUL_FUNERAL_DIRECTOR_REGISTRATION = EMAIL_HEAD +
+			@"
+            <p style=""letter-spacing:1px;font-family: 'Helvetica', Arial, sans-serif; font-size: 16px; font-weight: 500; color: #000000; margin: 0; margin-bottom: 15px;"">Hi {{user}},</p>
+            <p style=""letter-spacing:1px;font-family: 'Helvetica', Arial, sans-serif; font-size: 16px; font-weight: normal; color: #000000; margin: 0; margin-bottom: 15px;"">
+            Thank you for your registering with X-Solar. As we work exclusively with the funeral industry you won’t be able to  access our software or pricing until we’ve verified your account.
+            </p>
+            <p style=""letter-spacing:1px;font-family: 'Helvetica', Arial, sans-serif; font-size: 16px; font-weight: normal; margin: 0; color: #000000; margin-bottom: 15px;"">
+            We will review your account within 48 hours. Thank you for your patience.</p>
+           <p style=""letter-spacing:1px;font-family: 'Helvetica', Arial, sans-serif; font-size: 16px; font-weight: normal; margin: 0; color: #000000; margin-bottom: 15px;"">Warm regards,<br>
+            " + EMAIL_TAIL;
+
+        public const string RESET_PASSWORD = EMAIL_HEAD +
+            @"
+                <p style=""letter-spacing:1px;font-family:  'Helvetica', Arial, sans-serif; font-size: 16px; color: #000000; font-weight: normal; margin: 0; margin-bottom: 15px;"">Hi {{user}},</p>
+                <p style=""letter-spacing:1px;font-family:  'Helvetica', Arial, sans-serif; font-size: 16px; color: #000000; font-weight: normal; margin: 0; margin-bottom: 15px;"">
+                            We have received a request to reset the password for your account. Please follow the link below to reset your password.
+                </p>
+                <a href=""{{url}}"">Click this link to reset your password</a><br><br>
+                <p style=""letter-spacing:1px;font-family:  'Helvetica', Arial, sans-serif; font-size: 16px; font-weight: normal; color: #000000; margin: 0; margin-bottom: 15px;"">If you did not request a password reset, please disregard this message.</p>
+            " + EMAIL_TAIL;
+
+
+    }
 }
