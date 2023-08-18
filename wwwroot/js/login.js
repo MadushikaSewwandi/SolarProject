@@ -1,5 +1,4 @@
 $(document).ready(function () {
-  
   $("#LoginButton").click(function (event) {
     debugger
    

@@ -141,8 +141,8 @@ namespace UmbracoSolarProject1.Controllers
         [Route("SendResetPwdLink")]
         public async Task<Object> SendResetPwdLink(string email)
         {
-            try
-            {
+            
+            
                
                 MemberIdentityUser? user = await _memberManager.FindByEmailAsync(email);
 
@@ -153,13 +153,12 @@ namespace UmbracoSolarProject1.Controllers
                     // email
                     var webAppUrl = _configuration["WebApp:BaseURL"];
 
-                    var link = webAppUrl + string.Format("/reset-password/{0}/{1}", WebUtility.UrlEncode(user.Email), WebUtility.UrlEncode(token));
-                
+                    var link = webAppUrl + string.Format("/reset-password/?email=" + user.Email + "&token=" +WebUtility.UrlEncode(token));
+               
+                SendResetPasswordEmail(user.Email, link, user.Name, webAppUrl);
 
-                    SendResetPasswordEmail(user.Email, link, user.Name, webAppUrl);
 
-
-                    return BadRequest("Email successfully sent."); 
+                    return Ok(new { Message = "Reset Email Successfully sent" });
                 }
                 else
                 {
@@ -168,12 +167,38 @@ namespace UmbracoSolarProject1.Controllers
                 }
 
 
+            
+           
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<Object> ResetPassword(ResetPassword resetPassword)
+        {
+            try
+            {
+                var user = await _memberManager.FindByEmailAsync(resetPassword.Id);
+                if (user == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var result = await _memberManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest("Error");
+
+                }
+                else
+                {
+                    return true;
+                }
             }
             catch (Exception ex)
             {
-                return Ok(new { Message = "Reset Email Successfully sent" });
-              
+                return BadRequest("Error");
             }
+
         }
 
         private bool SendResetPasswordEmail(string userEmail, string url, string firstName, string webAppUrl)
