@@ -141,7 +141,6 @@ namespace UmbracoSolarProject1.Migrations
 
                     b.ToTable("Register");
                 });
-
         }
     }
 }
