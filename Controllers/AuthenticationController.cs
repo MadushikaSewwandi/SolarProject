@@ -154,22 +154,54 @@ namespace UmbracoSolarProject1.Controllers
                 // email
                 var webAppUrl = _configuration["WebApp:BaseURL"];
 
-                var link = webAppUrl + string.Format("/reset-password/{0}/{1}", WebUtility.UrlEncode(user.Email), WebUtility.UrlEncode(token));
+                    // email
+                    var webAppUrl = _configuration["WebApp:BaseURL"];
 
-
+                    var link = webAppUrl + string.Format("/reset-password/?email=" + user.Email + "&token=" +WebUtility.UrlEncode(token));
+               
                 SendResetPasswordEmail(user.Email, link, user.Name, webAppUrl);
 
 
-                return Ok(new { Message = "Reset Email Successfully sent" });
-            }
-            else
+                    return Ok(new { Message = "Reset Email Successfully sent" });
+                }
+                else
+                {
+                    // error message
+                    return BadRequest("User doesn't exist.");
+                }
+
+
+            
+           
+        }
+
+        [HttpPost]
+        [Route("ResetPassword")]
+        public async Task<Object> ResetPassword(ResetPassword resetPassword)
+        {
+            try
             {
-                // error message
-                return BadRequest("User doesn't exist.");
+                var user = await _memberManager.FindByEmailAsync(resetPassword.Id);
+                if (user == null)
+                {
+                    return BadRequest("User not found");
+                }
+                var result = await _memberManager.ResetPasswordAsync(user, resetPassword.Token, resetPassword.NewPassword);
+
+                if (!result.Succeeded)
+                {
+                    return BadRequest("Error");
+
+                }
+                else
+                {
+                    return true;
+                }
             }
-
-
-
+            catch (Exception ex)
+            {
+                return BadRequest("Error");
+            }
 
         }
 
