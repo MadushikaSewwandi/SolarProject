@@ -1,0 +1,58 @@
+﻿
+            @using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.ForgetPassword>
+@using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
+@{
+	Layout = "Master.cshtml";
+}
+
+<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Forgot Password</h3>
+								<p class="content">Please enter your username or email address. You will receive an
+                                    email message with instructions on how to reset your password.</p>
+							</div>
+							
+							
+                            <form name="sentMessage" id="RegisterForm" novalidate="novalidate">
+						
+							<div class="form-group">
+								<input class="input" type="email" id="email" placeholder="Email" required="required">
+							</div>
+							
+							<div class="form-group">
+								<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="ForgetPasswordButton">Submit</button>
+                            </div>		
+					</form>
+							
+							
+						</div>
+						<!-- /Billing Details -->
+
+						
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 ">
+						
+						<img src="@Url.Content("~/img/soalr1.jpg")" alt="" height="600px" width="500px">
+						
+						
+						
+					</div>
+					<!-- /Order Details -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
