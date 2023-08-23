@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using UmbracoSolarProject1.Data;
 
@@ -11,9 +12,11 @@ using UmbracoSolarProject1.Data;
 namespace UmbracoSolarProject1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230818085005_updatebillingdetailsversion2")]
+    partial class updatebillingdetailsversion2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,17 +42,14 @@ namespace UmbracoSolarProject1.Migrations
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int?>("EmailId")
+                        .HasColumnType("int");
 
                     b.Property<string>("FirstName")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RegisterId")
-                        .HasColumnType("int");
 
                     b.Property<int?>("Telephone")
                         .HasColumnType("int");
@@ -62,7 +62,7 @@ namespace UmbracoSolarProject1.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RegisterId");
+                    b.HasIndex("EmailId");
 
                     b.ToTable("BillingDetail");
                 });
@@ -156,11 +156,11 @@ namespace UmbracoSolarProject1.Migrations
 
             modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
                 {
-                    b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
+                    b.HasOne("UmbracoSolarProject1.Models.Register", "Email")
                         .WithMany()
-                        .HasForeignKey("RegisterId");
+                        .HasForeignKey("EmailId");
 
-                    b.Navigation("Register");
+                    b.Navigation("Email");
                 });
 #pragma warning restore 612, 618
         }

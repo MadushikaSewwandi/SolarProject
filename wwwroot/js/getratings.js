@@ -1,117 +1,272 @@
 $(document).ready(function () {
-    debugger;
-    var user = localStorage.getItem("user");
-    if (user) {
-      var parsedUser = JSON.parse(user);
-      var userId = parsedUser?.id;
-      fetchRatings();
-    } else {
-      console.error("User data not found in localStorage.");
-    }
-  
-  });
-  
-  function fetchRatings() {
-    var user = localStorage.getItem("user");
-    if (user) {
-      var parsedUser = JSON.parse(user);
-      var token = parsedUser?.token;
-  
-      $.ajax({
-        type: "GET",
-        url: "/api/Ratings/GetRatingsByProductName/",
-        headers: {
-          "Authorization": "Bearer " + token,
-        },
-        success: function (response) {
-          console.log(response);
-          displayRatings(response);
-          var avgrate = sumRatingValue(response);
-          displayStars(response);
-          
-          
-        },
-        error: function (error) {
-          console.error("Error fetching cart items:", error.responseText);
-        },
-      });
-    } else {
-      console.error("User data not found in localStorage.");
-    }
+  debugger;
+ var user = localStorage.getItem("user");
+  if (user) {
+    var parsedUser = JSON.parse(user);
+    var userId = parsedUser?.id;
+    fetchRatings();
+  } else {
+    console.error("User data not found in localStorage.");
   }
+});
   
-  function displayRatings(response) {
-    debugger;
-    var RatingsContainer = $("#RatingsContainer");
-    RatingsContainer.empty();
-  
-    var RatingsHtml = "";
-    response.slice(-3).forEach(function (Rating) {
-      //var totalPrice = (parseFloat(cartItem.productPrice) * cartItem.quantity).toLocaleString();
-      console.log(Rating.name);
 
-      var ratingValue = Rating.ratingvalue-1;
-      var stars = [];
-      for (let i = 0; i < ratingValue; i++) {
-        stars.push('<i class="fa fa-star"></i>');
-      }
-      
-      stars.push('<i class="fa fa-star o-empty"></i>');
-      
-      
-  
-      var itemHtml =
-        "<div>"+
-        "<div class='review-body'>"+
-        "<h5 class='name'>"+Rating.name+"</h5>"+
-        "<div class='review-rating' style='color: #D10024;'>"+
-        stars.join("")+
-        "</div>"+"</div>"+
-        "<div class='review-body'>"+
-        "<p>"+Rating.review+"</p>"+
-        "</div>"
-  
-      RatingsHtml += itemHtml;
+
+
+function fetchRatings() {
+ var user = localStorage.getItem("user");
+  if (user) {
+    var parsedUser = JSON.parse(user);
+    var token = parsedUser?.token;
+   debugger;
+
+    $.ajax({
+      type: "GET",
+      url: "/api/Ratings/GetRatingsByProductName/",
+      headers: {
+       "Authorization": "Bearer " + token,
+      },
+      success: function (response) {
+        console.log(response);
+        displayRatings(response);
+        var avgrate = sumRatingValue(response);
+        displayStars(response);
+        starcount(response);
+        
+        
+      },
+      error: function (error) {
+        console.error("Error fetching cart items:", error.responseText);
+      },
     });
+    console.log(response);
+  } else {
+    console.error("User data not found in localStorage.");
+  }
+}
+
+function displayRatings(response) {
+  debugger;
+  var RatingsContainer = $("#RatingsContainer");
+  RatingsContainer.empty();
+
+
+  var RatingsHtml = "";
+  response.slice(-3).forEach(function (Rating) {
+    
+    console.log(Rating.name);
+
+    var ratingValue = Rating.ratingvalue-1;
+    var stars = [];
+    for (let i = 0; i < ratingValue; i++) {
+      stars.push('<i class="fa fa-star"></i>');
+    }
+    
+    stars.push('<i class="fa fa-star o-empty"></i>');
+
+    
+    
+    
+
+    var itemHtml =
+      "<div>"+
+      "<div class='review-body'>"+
+      "<h5 class='name'>"+Rating.name+"</h5>"+
+      "<div class='review-rating' style='color: #D10024;'>"+
+      stars.join("")+
+      "</div>"+"</div>"+
+      "<div class='review-body'>"+
+      "<p>"+Rating.review+"</p>"+
+      "</div>"
+
+    RatingsHtml += itemHtml;
+  });
+
+ 
+
+ 
+
+  RatingsContainer.html(RatingsHtml);
+}
+
+function sumRatingValue(response) {
+  debugger;
+  var sum = 0;
+  var avgrate=0;
+  for (var i = 0; i < response.length; i++) {
+    sum += response[i].ratingvalue;
+    avgrate=sum/response.length;
+  }
   
-    RatingsContainer.html(RatingsHtml);
-  }
+  return avgrate;
+  
 
-  function sumRatingValue(response) {
-    debugger;
-    var sum = 0;
-    var avgrate=0;
-    for (var i = 0; i < response.length; i++) {
-      sum += response[i].ratingvalue;
-      avgrate=sum/response.length;
+}
+function displayStars(response, avgrate) {
+  var avgrate = sumRatingValue(response);
+
+  var ratingboxContainer = $("#rating-box");
+  ratingboxContainer.empty();
+ 
+  
+
+  var itemHtmlratingbox = "";
+  var RatingsHtml = "";
+
+  if (avgrate >= 1) {
+    var stars = [];
+    for (var i = 0; i < avgrate; i++) {
+      stars.push('<i class="fa fa-star" style="color: #D10024;"></i>');
     }
-    
-    return avgrate;
-    
-
-  }
-  function displayStars(response, avgrate) {
-    var avgrate = sumRatingValue(response);
-
-    var ratingboxContainer = $("#rating-box");
-    ratingboxContainer.empty();
-
-    var itemHtmlratingbox = "";
-    var RatingsHtml = "";
-
-    if (avgrate >= 1) {
-      var stars = [];
-      for (var i = 0; i < avgrate; i++) {
-        stars.push('<i class="fa fa-star" style="color: #D10024;"></i>');
-      }
-      var emptyStars = [];
-      for (var i = 0; i < 5 - avgrate; i++) {
-        emptyStars.push('<i class="fa fa-star o-empty"></i>');
-      }
-
-      itemHtmlratingbox += "<div class='rating-stars'>" + stars.join("") + emptyStars.join("")+"</div>";
-
-      RatingsHtml += itemHtmlratingbox;
+    var emptyStars = [];
+    for (var i = 1; i < 5 - avgrate; i++) {
+      emptyStars.push('<i class="fa fa-star o-empty"></i>');
     }
-    ratingboxContainer.html(RatingsHtml);
+
+    itemHtmlratingbox += "<div class='rating-stars'>" + stars.join("") + emptyStars.join("")+"</div>";
+
+    
+
+    RatingsHtml += itemHtmlratingbox;
+    
   }
+  ratingboxContainer.html(RatingsHtml);
+ 
+
+}
+
+function starcount(response){
+  debugger;
+  var fivepercent=0;
+  var fourpercent=0;
+  var threepercent=0;
+  var twopercent=0;
+  var onepercent=0;
+  var sumoffive =0;
+  var sumoffour=0;
+  var sumofthree =0;
+  var sumoftwo=0;
+  var sumofone=0;
+  var itemHtml1="";
+  var itemHtml2="";
+  var itemHtml3="";
+  var itemHtml4="";
+  var itemHtml5="";
+  var RatingsHtml="";
+  
+  for (var i = 0; i < response.length; i++) {
+    if(response[i].ratingvalue==5){
+      sumoffive++;
+      
+    }
+    else if(response[i].ratingvalue==4){
+      sumoffour++;
+    }
+    else if(response[i].ratingvalue==3){
+      sumofthree++;
+    }
+    else if(response[i].ratingvalue==2){
+      sumoftwo++;
+    }
+    else if(response[i].ratingvalue==1){
+      sumofone++;
+    }
+
+    
+
+    var RatingsContainer5 = $("#5ratecount");
+    RatingsContainer5.empty();
+
+    var RatingsContainer4 = $("#4ratecount");
+    RatingsContainer4.empty();
+
+    var RatingsContainer3 = $("#3ratecount");
+    RatingsContainer3.empty();
+
+    var RatingsContainer2 = $("#2ratecount");
+    RatingsContainer2.empty();
+
+    var RatingsContainer1 = $("#1ratecount");
+    RatingsContainer1.empty();
+
+   
+  }
+  fivepercent=(sumoffive/response.length)*100;
+  fourpercent=(sumoffour/response.length)*100;
+  threepercent=(sumofthree/response.length)*100;
+  twopercent=(sumoftwo/response.length)*100;
+  onepercent=(sumofone/response.length)*100;
+  
+  console.log(fivepercent)
+
+  var itemHtml5 ="<div class='rating-stars'>"+
+                  "<i class='fa fa-star'></i>"+
+                  "<i class='fa fa-star'></i>"+
+                  "<i class='fa fa-star'></i>"+
+                  "<i class='fa fa-star'></i>"+
+                  "<i class='fa fa-star'></i>"+
+                "</div>"+
+                "<div class='rating-progress'>"+
+                  "<div style='width: "+fivepercent+"%'></div>"+
+                "</div>"+
+                ("<span class='sum'>"+sumoffive+"</span>");
+
+  var itemHtml4 ="<div class='rating-stars'>"+
+                "<i class='fa fa-star'></i>"+
+                "<i class='fa fa-star'></i>"+
+                "<i class='fa fa-star'></i>"+
+                "<i class='fa fa-star'></i>"+
+                "<i class='fa fa-star-o'></i>"+
+              "</div>"+
+              "<div class='rating-progress'>"+
+                "<div style='width:"+fourpercent+"%'></div>"+
+              "</div>"+
+              ("<span class='sum'>"+sumoffour+"</span>");
+  
+
+  var itemHtml3 ="<div class='rating-stars'>"+
+              "<i class='fa fa-star'></i>"+
+              "<i class='fa fa-star'></i>"+
+              "<i class='fa fa-star'></i>"+
+              "<i class='fa fa-star-o'></i>"+
+              "<i class='fa fa-star-o'></i>"+
+            "</div>"+
+            "<div class='rating-progress'>"+
+              "<div style='width: "+threepercent+"%'></div>"+
+            "</div>"+
+            ("<span class='sum'>"+sumofthree+"</span>");
+
+  var itemHtml2 ="<div class='rating-stars'>"+
+            "<i class='fa fa-star'></i>"+
+            "<i class='fa fa-star'></i>"+
+            "<i class='fa fa-star-o'></i>"+
+            "<i class='fa fa-star-o'></i>"+
+            "<i class='fa fa-star-o'></i>"+
+          "</div>"+
+          "<div class='rating-progress'>"+
+            "<div style='width: "+twopercent+"%'></div>"+
+          "</div>"+
+          ("<span class='sum'>"+sumoftwo+"</span>");
+  
+  var itemHtml1 ="<div class='rating-stars'>"+
+          "<i class='fa fa-star'></i>"+
+          "<i class='fa fa-star-o'></i>"+
+          "<i class='fa fa-star-o'></i>"+
+          "<i class='fa fa-star-o'></i>"+
+          "<i class='fa fa-star-o'></i>"+
+        "</div>"+
+        "<div class='rating-progress'>"+
+          "<div style='width:"+onepercent+"%'></div>"+
+        "</div>"+
+        ("<span class='sum'>"+sumofone+"</span>");
+
+ 
+  RatingsContainer5.html(itemHtml5);
+  RatingsContainer4.html(itemHtml4);
+  RatingsContainer3.html(itemHtml3);
+  RatingsContainer2.html(itemHtml2);
+  RatingsContainer1.html(itemHtml1);
+  
+
+
+}

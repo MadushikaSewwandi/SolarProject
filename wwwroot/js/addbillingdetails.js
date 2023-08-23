@@ -1,13 +1,18 @@
 $(document).ready(function () {
     
+    
  
         $("#placeorderbtn").on("click", function ()
 {
           
           
-      debugger;
+     
             
         // Get the values from the form fields
+        var firstname=document.getElementById("first-name").value;
+        var lastname=document.getElementById("last-name").value;
+        var email=document.getElementById("email").value;
+        var telephone=document.getElementById("telephone").value;
         var address = document.getElementById("address").value;
         var city = document.getElementById("city").value;
         var country = document.getElementById("country").value;
@@ -34,10 +39,15 @@ $(document).ready(function () {
             var item = {
               
                 UserId:userId,
+                FirstName:firstname,
+                LastName:lastname,
+                Email:email,
                 Address: address,
                 City: city,
                 Country: country,
                 ZipCode: zipcode,
+                Telephone:telephone
+
                 
               
             };

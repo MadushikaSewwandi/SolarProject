@@ -11,7 +11,14 @@ namespace UmbracoSolarProject1.Models
         public string? Country { get; set; }
         public string? City { get; set; }
         public string? ZipCode { get; set; }
-        
+
+        public string? FirstName { get; set; }
+
+        public string? LastName { get; set; }
+        public string? Email { get; set; }
+
+        public int? Telephone { get; set; }
+
 
         public Register? Register { get; set; }
     }

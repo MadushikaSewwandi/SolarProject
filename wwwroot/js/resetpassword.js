@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $("#ResetPasswordButton").click(function (event) {
-      debugger
+      
      
       var formData = {
         Password: $("#password").val(),

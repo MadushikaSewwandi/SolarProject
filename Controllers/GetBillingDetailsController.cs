@@ -25,7 +25,7 @@ namespace UmbracoSolarProject1.Controllers
             try
             {
                 // Retrieve cart items from the database for the specified user ID
-                var billingDetails = await _authContext.Register.Where(c => c.Id == userId).ToListAsync();
+                var billingDetails = await _authContext.BillingDetail.Where(c => c.UserId == userId).ToListAsync();
                 
 
                 return Ok(billingDetails);
@@ -36,37 +36,59 @@ namespace UmbracoSolarProject1.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("AddBillingDetail")]
         public async Task<IActionResult> AddBillingDetail([FromBody] BillingDetail item)
         {
             try
             {
-                // Create a new CartItem entity and set its properties
-                var BillingDetail = new BillingDetail
+                // Check if a billing detail record already exists for the given UserId
+                var existingBillingDetail = await _authContext.BillingDetail
+                    .FirstOrDefaultAsync(b => b.UserId == item.UserId);
+
+                if (existingBillingDetail != null)
                 {
-                    UserId = item.UserId,
-                    Address = item.Address,
-                    Country = item.Country,
-                    City = item.City,
-                    ZipCode = item.ZipCode
-                };
-                
+                    // Update the existing billing detail record with the new data
+                    existingBillingDetail.Address = item.Address;
+                    existingBillingDetail.Country = item.Country;
+                    existingBillingDetail.City = item.City;
+                    existingBillingDetail.ZipCode = item.ZipCode;
+                    existingBillingDetail.FirstName = item.FirstName;
+                    existingBillingDetail.LastName = item.LastName;
+                    existingBillingDetail.Email = item.Email;
+                    existingBillingDetail.Telephone = item.Telephone;
+                }
+                else
+                {
+                    // Create a new BillingDetail entity and set its properties
+                    var newBillingDetail = new BillingDetail
+                    {
+                        UserId = item.UserId,
+                        FirstName = item.FirstName,
+                        LastName = item.LastName,
+                        Email = item.Email,
+                        Telephone = item.Telephone,
+                        Address = item.Address,
+                        Country = item.Country,
+                        City = item.City,
+                        ZipCode = item.ZipCode
+                    };
 
-                // Add the new CartItem entity to the CartItems DbSet
-                _authContext.BillingDetail.Add(BillingDetail);
+                    // Add the new BillingDetail entity to the BillingDetail DbSet
+                    _authContext.BillingDetail.Add(newBillingDetail);
+                }
 
-                // Save changes to the database
-                await _authContext.SaveChangesAsync();
+                // Save changes to the database
+                await _authContext.SaveChangesAsync();
 
-                return Ok("Item added to cart successfully.");
+                return Ok("Billing detail added or updated successfully.");
             }
             catch (Exception ex)
             {
                 return BadRequest("Error: " + ex.Message);
             }
         }
+
 
 
     }

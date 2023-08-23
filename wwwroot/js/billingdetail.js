@@ -1,7 +1,4 @@
 $(document).ready(function () {
-    debugger;
-
-    debugger;
     var user = localStorage.getItem("user");
     if (user) {
         var parsedUser = JSON.parse(user);
@@ -30,9 +27,9 @@ function fetchBillingDetailsByUserId(userId) {
                 "Authorization": "Bearer " + token,
 
             },
-            success: function (response) {
+            success: function (billingDetails) {
                 console.log("success");
-                displayBillingDetails(response);
+                displayBillingDetails(billingDetails);
 
 
                 //displayBillingDetails(response);
@@ -50,13 +47,13 @@ function fetchBillingDetailsByUserId(userId) {
 }
 
 function displayBillingDetails(billingDetails) {
-    debugger;
-    var billingDetailsContainer = $("#billing-details");
-    billingDetailsContainer.empty();
-    var billingDetailsHtml = "";
-    billingDetails.forEach(function (Register) {
-        console.log("Billing Details:", Register);
-        console.log(Register.email);
+    
+    //var billingDetailsContainer = $("#billing-details");
+    //billingDetailsContainer.empty();
+   // var billingDetailsHtml = "";
+   /* billingDetails.forEach(function (billingDetails) {
+        console.log("Billing Details:", billingDetails);
+        //console.log(Register.email);
 
         var itemHtml =
 
@@ -64,20 +61,20 @@ function displayBillingDetails(billingDetails) {
             "<h3 class='title'>Billing address</h3>" +
             "</div>" +
             "<div class='form-group'>" +
-            "<input class='input' type='text' id='first-name' name='first-name' placeholder='First Name' value='" + Register.firstName + "'>" +
+            "<input class='input' type='text' id='first-name' name='first-name' placeholder='First Name' value='" + billingDetails.firstName + "'>" +
             "</div>" +
             "<div class='form-group'>" +
-            "<input class='input' type='text'  id='last-name' name='last-name' placeholder='Last Name' value='" + Register.lastName + "'>" +
+            "<input class='input' type='text'  id='last-name' name='last-name' placeholder='Last Name' value='" + billingDetails.lastName + "'>" +
             "</div>" +
             "<div class='form-group'>" +
-            "<input class='input' type='email' name='email' id='email' placeholder='Email' value='" + Register.email + "'>" +
+            "<input class='input' type='email' name='email' id='email' placeholder='Email' value='" + billingDetails.email + "'>" +
             "</div>" +
             "<div class='form-group'>" +
-            "<input class='input'' type='text' name='address' placeholder='Address'>" +
+            "<input class='input'' type='text' name='address' placeholder='Address' id='address' value='"+ billingDetails.address +"'>" +
             "</div>" +
 
             "<div class='form-group'>" +
-            "<input class='input' type='text' name='city' placeholder='City'>" +
+            "<input class='input' type='text' name='city' placeholder='City' id='city' value='"+billingDetails.city +"'>" +
             "</div>" +
             "<div class='form-group'>" +
             "<input class='input' type='text' name='country' placeholder='Country'>" +
@@ -92,12 +89,20 @@ function displayBillingDetails(billingDetails) {
         billingDetailsHtml += itemHtml;
 
 
-    });
+    });*/
 
 
     document.getElementById('first-name').value = billingDetails[0].firstName;
     document.getElementById('last-name').value = billingDetails[0].lastName;
     document.getElementById('email').value = billingDetails[0].email;
+    document.getElementById('address').value = billingDetails[0].address;
+    document.getElementById('city').value = billingDetails[0].city;
+    document.getElementById('email').value = billingDetails[0].email;
+    document.getElementById('telephone').value = billingDetails[0].telephone;
+    document.getElementById('zipcode').value = billingDetails[0].zipCode;
+    document.getElementById('country').value = billingDetails[0].country;
+    
+
 
 
 

@@ -4,9 +4,9 @@ $(document).ready(function () {
     
 {
           console.log("add to cart");
-          debugger;
+          
       
-          before before before before 
+         
           var productPrice = $("#productPrice").val();
           var productThumbnail = $("#productThumbnail").val();
           var quantity = parseInt($("#quantityInput").val());

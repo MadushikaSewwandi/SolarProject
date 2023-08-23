@@ -155,7 +155,7 @@ namespace UmbracoSolarProject1.Controllers
                 var webAppUrl = _configuration["WebApp:BaseURL"];
 
                     // email
-                    var webAppUrl = _configuration["WebApp:BaseURL"];
+                    //var webAppUrl = _configuration["WebApp:BaseURL"];
 
                     var link = webAppUrl + string.Format("/reset-password/?email=" + user.Email + "&token=" +WebUtility.UrlEncode(token));
                
