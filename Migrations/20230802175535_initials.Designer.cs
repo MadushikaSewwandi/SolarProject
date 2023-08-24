@@ -12,8 +12,8 @@ using UmbracoSolarProject1.Data;
 namespace UmbracoSolarProject1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230807050216_billingdata")]
-    partial class billingdata
+    [Migration("20230802175535_initials")]
+    partial class initials
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,39 +25,6 @@ namespace UmbracoSolarProject1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("City")
-                        .HasColumnType("int");
-
-                    b.Property<decimal?>("Country")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int?>("RegisterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegisterId");
-
-                    b.ToTable("BillingDetail");
-                });
-
             modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
                 {
                     b.Property<int>("Id")
@@ -67,6 +34,7 @@ namespace UmbracoSolarProject1.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ProductLink")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ProductName")
@@ -81,33 +49,9 @@ namespace UmbracoSolarProject1.Migrations
                     b.Property<int?>("Quantity")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("CartItems");
-                });
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.Rating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("ProductID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RatingValue")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("UmbracoSolarProject1.Models.Register", b =>
@@ -136,26 +80,6 @@ namespace UmbracoSolarProject1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Register");
-                });
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
-                {
-                    b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
-                        .WithMany()
-                        .HasForeignKey("RegisterId");
-
-                    b.Navigation("Register");
-                });
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
-                {
-                    b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Register");
                 });
 #pragma warning restore 612, 618
         }

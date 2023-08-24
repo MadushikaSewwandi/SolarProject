@@ -28,7 +28,7 @@ namespace UmbracoSolarProject1.Controllers
 		{
 			
 			var email = new EmailAddress();
-			email.Address = model.Email;
+			email.Address = "sewwandi@devbranch.net";
 			email.DisplayName = "XSolar";
 			
 

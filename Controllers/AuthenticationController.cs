@@ -46,15 +46,15 @@ namespace UmbracoSolarProject1.Controllers
             _authContext = dataContext;
             _memberManager = memberManager;
             _memberTypeService = memberTypeService;
-            _memberService = memberService;
+			_memberService = memberService;
             _memberSignInManager = memberSignInManager;
         }
 
 
         [HttpPost]
-        [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] Register model)
-        {
+		[Route("Register")]
+		public async Task<IActionResult> Register([FromBody] Register model)
+		{
             var memberTypeAlias = "Member";
 
             // Retrieve the member type
@@ -80,8 +80,10 @@ namespace UmbracoSolarProject1.Controllers
 
             var member = _memberService.GetByEmail(identityUser.Email);
 
-            member.SetValue("firstName", model.FirstName);
+			member.SetValue("firstName", model.FirstName);
             member.SetValue("lastName", model.LastName);
+            member.SetValue("phoneNumber", model.PhoneNumber);
+            
             member.IsApproved = true;
 
             // Save the member
@@ -93,48 +95,48 @@ namespace UmbracoSolarProject1.Controllers
             return Ok(new { Message = "User Successfully Registered" });
         }
 
-        [HttpPost]
-        [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] Login model)
-        {
+		[HttpPost]
+		[Route("Login")]
+		public async Task<IActionResult> Login([FromBody] Login model)
+		{
+            
+                var user = await _memberManager.FindByNameAsync(model.Email);
 
-            var user = await _memberManager.FindByNameAsync(model.Email);
+                if (user == null)
+                {
+                    return BadRequest( "User doesn't exist.");
+                }
 
-            if (user == null)
-            {
-                return BadRequest("User doesn't exist.");
-            }
+                var passwordCorrect = await _memberManager.CheckPasswordAsync(user, model.Password);
 
-            var passwordCorrect = await _memberManager.CheckPasswordAsync(user, model.Password);
+                if (!passwordCorrect)
+                {
+                    return BadRequest("Password is incorrect.");
+                }
 
-            if (!passwordCorrect)
-            {
-                return BadRequest("Password is incorrect.");
-            }
-
-
-
-
-            var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
-
-            var token = new JwtSecurityToken(
-                issuer: _configuration["JWT:Issuer"],
-                audience: _configuration["JWT:Audience"],
-                expires: DateTime.Now.AddHours(3),
-                signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
-            );
-
-            return Ok(new
-            {
-                token = new JwtSecurityTokenHandler().WriteToken(token),
-                expiration = token.ValidTo,
-                id = user.Id,
-                firstName = user.Name,
+                
 
 
-            });
+                var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
 
+                var token = new JwtSecurityToken(
+                    issuer: _configuration["JWT:Issuer"],
+                    audience: _configuration["JWT:Audience"],
+                    expires: DateTime.Now.AddHours(3),
+                    signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
+                );
 
+                return Ok(new
+                {
+                    token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expiration = token.ValidTo,
+                    id = user.Id,
+                    firstName = user.Name,
+                   
+
+                });
+            
+           
 
         }
 
@@ -142,22 +144,19 @@ namespace UmbracoSolarProject1.Controllers
         [Route("SendResetPwdLink")]
         public async Task<Object> SendResetPwdLink(string email)
         {
+            
+            
+               
+                MemberIdentityUser? user = await _memberManager.FindByEmailAsync(email);
 
-
-
-            MemberIdentityUser? user = await _memberManager.FindByEmailAsync(email);
-
-            if (user != null)
-            {
-                var token = await _memberManager.GeneratePasswordResetTokenAsync(user);
-
-                // email
-                var webAppUrl = _configuration["WebApp:BaseURL"];
+                if (user != null)
+                {
+                    var token = await _memberManager.GeneratePasswordResetTokenAsync(user);
 
                     // email
-                    //var webAppUrl = _configuration["WebApp:BaseURL"];
+                    var webAppUrl = _configuration["WebApp:BaseURL"];
 
-                    var link = webAppUrl + string.Format("/reset-password/?email=" + user.Email + "&token=" +WebUtility.UrlEncode(token));
+                    var link = webAppUrl + string.Format("/reset-password/?email=" + WebUtility.UrlEncode(user.Email) + "&token=" +WebUtility.UrlEncode(token));
                
                 SendResetPasswordEmail(user.Email, link, user.Name, webAppUrl);
 
@@ -231,37 +230,37 @@ namespace UmbracoSolarProject1.Controllers
         }
 
         private bool SendSuccessfullyRegisteredEmail(string userEmail, string firstName)
-        {
+		{
 
-            var rng = new Random();
-
-
-            var email = new EmailAddress();
-            email.Address = userEmail;
-            email.DisplayName = "X-Solar";
-
-            var emails = new EmailAddress[1];
-            emails[0] = email;
+			var rng = new Random();
 
 
-            var message = new EmailMessage(
-              emails,
-              "Thank you for registering your interest with ",
-              EmailTemplates.SUCCESSFUL_FUNERAL_DIRECTOR_REGISTRATION.Replace("{{user}}", firstName)
+			var email = new EmailAddress();
+			email.Address = userEmail;
+			email.DisplayName = "X-Solar";
+
+			var emails = new EmailAddress[1];
+			emails[0] = email;
 
 
-
-
-              );
-
-            _emailSender.SendEmail(message);
-            return true;
-
-        }
+			var message = new EmailMessage(
+			   emails,
+			   "Thank you for registering your interest with ",
+			   EmailTemplates.SUCCESSFUL_FUNERAL_DIRECTOR_REGISTRATION.Replace("{{user}}", firstName)
 
 
 
 
+		   );
 
-    }
+			_emailSender.SendEmail(message);
+			return true;
+
+		}
+
+
+
+
+
+	}
 }

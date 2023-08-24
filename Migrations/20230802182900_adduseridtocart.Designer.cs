@@ -12,8 +12,8 @@ using UmbracoSolarProject1.Data;
 namespace UmbracoSolarProject1.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20230818084141_updatebillingdetails")]
-    partial class updatebillingdetails
+    [Migration("20230802182900_adduseridtocart")]
+    partial class adduseridtocart
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,39 +24,6 @@ namespace UmbracoSolarProject1.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RegisterId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegisterId");
-
-                    b.ToTable("BillingDetail");
-                });
 
             modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
                 {
@@ -86,35 +53,9 @@ namespace UmbracoSolarProject1.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("UserId");
+
                     b.ToTable("CartItems");
-                });
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.Rating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RatingValue")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Review")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rating");
                 });
 
             modelBuilder.Entity("UmbracoSolarProject1.Models.Register", b =>
@@ -145,11 +86,13 @@ namespace UmbracoSolarProject1.Migrations
                     b.ToTable("Register");
                 });
 
-            modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
+            modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
                 {
                     b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
                         .WithMany()
-                        .HasForeignKey("RegisterId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Register");
                 });

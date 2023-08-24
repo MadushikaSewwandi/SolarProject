@@ -11,20 +11,17 @@ namespace UmbracoSolarProject1.Data
 
 		}
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            base.OnModelCreating(builder);
+		protected override void OnModelCreating(ModelBuilder builder)
+		{
+			base.OnModelCreating(builder);
 
 			
 
 
 
-        }
+		}
 
-        public DbSet<Register> Register { get; set; }
+		public DbSet<Register> Register { get; set; }
 		public DbSet<CartItem> CartItems { get; set; }
-
-        public DbSet<Rating> Rating { get; set; }
-        public DbSet<BillingDetail> BillingDetail { get; set; }
-    }
+	}
 }

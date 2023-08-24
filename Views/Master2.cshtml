@@ -1,10 +1,7 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
 @inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
-
 @{
 	Layout = null;
-	  
-  
 }
 
 <!DOCTYPE html>
@@ -44,26 +41,6 @@
 	<body>
 		<!-- HEADER -->
 		<header>
-			<!-- TOP HEADER -->
-			<div id="top-header">
-				<div class="container">
-					<ul class="header-links pull-left">
-					   
-
-				
-					</ul>
-					
-					<ul class="header-links pull-right">
-                       
-                        <li><a href="/register">Register</a></li>
-                        <li><a href="/login">Login</a></li>
-                        	<li><a href="#" id="logoutButton">Logout</a></li>
-                    
-
-					</ul>
-				</div>
-			</div>
-			<!-- /TOP HEADER -->
 
 			<!-- MAIN HEADER -->
 			<div id="header">
@@ -85,36 +62,8 @@
 						<!-- /LOGO -->
 						
 
-						<!-- SEARCH BAR -->
-						<div class="col-md-6">
-							<div class="header-search">
-								<form>
-								    
-								    
-									
-									<input class="input"  id="search-input" placeholder="Search here">
-									<button class="search-btn" id="search-button">Search</button>
-									
-									<div id="search-results">
-                                    <!-- Search results will be displayed here -->
-                                  </div>
-                                  
-								</form>
-							</div>
-						</div>
-						<!-- /SEARCH BAR -->
-						@{
-                            var selection = Umbraco.ContentAtRoot().FirstOrDefault()
-                                .ChildrenOfType("product")
-                                .Where(x => x.IsVisible())
-                                .OrderBy(x => x.Name);
-                        }
-                     
-
-                        <script>
-                            // Extract product names from Razor to JavaScript array
-                            var productNames = @Html.Raw(Json.Serialize(selection.Select(x => x.Name)));
-                        </script>
+						
+					
                         
 
 
@@ -125,58 +74,9 @@
 								
 								
 
-								<!-- Cart -->
-								<div class="dropdown">
-									<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-										<i class="fa fa-shopping-cart"></i>
-										<span>Your Cart</span>
-										<div class="qty">0</div>
-									</a>
-									
-									
-									
-									
-									
-									
-									<div class="cart-dropdown">
-										<div class="cart-list" id="cartListContainer">
-											<div class="product-widget">
-												<div class="product-img">
-													<img src="" alt="">
-												</div>
-												<div class="product-body">
-													<h3 class="product-name"><a href="#"></a></h3>
-													<h4 class="product-price"><span class="qty"></h4>
-												</div>
-												
-											</div>
-
-											
-											
-										</div>
-										<div class="cart-summary">
-											<small id="cartItemCountText"></small>
-											<h5 id="cartTotalPrice"></h5>
-										</div>
-										<div class="cart-btns">
-											<a href="/cart">View Cart</a>
-											<a href="/cart">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
-										</div>
-									</div>
-								</div>
-								<!-- /Cart -->
+							
 								
 								
-								<!-- Profile -->
-							<div id="profileContainer" style="display: none;">
-    <a href="/userprofile/">
-        <i class="fa fa-user-circle fa-3x"></i>
-        <span>Profile</span>
-    </a>
-</div>
-
-
-								<!-- /Profile -->
 								
 
 								<!-- Menu Toogle -->
@@ -198,7 +98,7 @@
 			<!-- /MAIN HEADER -->
 		</header>
 		<!-- /HEADER -->
-		@await Html.PartialAsync("Navigation")
+		
 		
 		
 
@@ -211,54 +111,7 @@
 		
 		<!-- /SECTION -->
 
-		<!-- CONTACTUS -->
-		<div id="newsletter" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<div class="newsletter">
-							<p>Get in <strong>TOUCH</strong></p>
-							
-							
-						<form name="sentMessage" id="contactForm" novalidate="novalidate">
-								<div class="form-row">
-									<div class="col-sm-6 control-group">
-										<input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="name" placeholder="Your Name" required="required" data-validation-required-message="Please enter your name" />
-										<p class="help-block text-danger"></p>
-									</div>
-									<div class="col-sm-6 control-group">
-										<input type="email" class="form-control bg-secondary border-0 py-4 px-3" id="email" placeholder="Your Email" required="required" data-validation-required-message="Please enter your email" />
-										<p class="help-block text-danger"></p>
-									</div>
-								</div>
-								<div class="control-group">
-									<input type="text" class="form-control bg-secondary border-0 py-4 px-3" id="subject" placeholder="Subject" required="required" data-validation-required-message="Please enter a subject" />
-									<p class="help-block text-danger"></p>
-								</div>
-								<div class="control-group">
-									<textarea class="form-control bg-secondary border-0 py-2 px-3" rows="6" id="message" placeholder="Message" required="required" data-validation-required-message="Please enter your message"></textarea>
-									<p class="help-block text-danger"></p>
-								</div>
-								<div class="text-center">
-									<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="sendMessageButton">Send Message</button>
-								</div>
-							</form>
-							
-							
-						
-							
-							
-							
-						</div>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /CONTACTUS -->
+		
 
 		<!-- FOOTER -->
 		<footer id="footer">
@@ -346,7 +199,6 @@
 <script src="@Url.Content("~/js/forgetpassword.js")"></script>
 <script src="@Url.Content("~/js/resetpassword.js")"></script>
 <script src="@Url.Content("~/js/userprofile.js")"></script>
-<script src="@Url.Content("~/js/home.js")"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 

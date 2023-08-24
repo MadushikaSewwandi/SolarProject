@@ -138,8 +138,8 @@
                                                     <td style=""font-family: Roboto, sans-serif; font-size: 16px; vertical-align: top;"" valign=""top"">
                                                         <!-- START MAIN CONTENT AREA -->";
 
-		public const string EMAIL_TAIL = @"<p style=""letter-spacing:1px;font-family: Roboto, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 15px;""><br>The <b>euulo</b> Team<br>
-euulo.com</p>
+		public const string EMAIL_TAIL = @"<p style=""letter-spacing:1px;font-family: Roboto, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 15px;""><br>The <b>X-Solar</b> Team<br>
+Xsolar.com</p>
                                          
                                         <br>
                        
@@ -147,7 +147,7 @@ euulo.com</p>
                                 <div style=""text-align: center;"">
                                 <p style=""letter-spacing:1px;font-family: Roboto, sans-serif; font-size: 16px; font-weight: normal; margin: 0; margin-bottom: 15px;"">
 
-                                      <small style = ""font-size: 12px; color: #058573; font-style: italic;"" > <img src=""{{webUrl}}/assets/euulo-heart.png"" style=""width: 12px; height:auto; margin-right: 5px;""> Celebrating memories that become treasures. </small>
+                                      <small style = ""font-size: 12px; color: #058573; font-style: italic;"" > <img src=""{{webUrl}}/assets/euulo-heart.png"" style=""width: 12px; height:auto; margin-right: 5px;"">  </small>
                                 </p>
                                
                                 </div>

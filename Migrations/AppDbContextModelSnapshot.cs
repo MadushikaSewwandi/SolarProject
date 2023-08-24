@@ -22,51 +22,6 @@ namespace UmbracoSolarProject1.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Address")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("City")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Country")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("RegisterId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Telephone")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ZipCode")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RegisterId");
-
-                    b.ToTable("BillingDetail");
-                });
-
             modelBuilder.Entity("UmbracoSolarProject1.Models.CartItem", b =>
                 {
                     b.Property<int>("Id")
@@ -98,34 +53,6 @@ namespace UmbracoSolarProject1.Migrations
                     b.ToTable("CartItems");
                 });
 
-            modelBuilder.Entity("UmbracoSolarProject1.Models.Rating", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ProductName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("RatingValue")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Review")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Rating");
-                });
-
             modelBuilder.Entity("UmbracoSolarProject1.Models.Register", b =>
                 {
                     b.Property<int>("Id")
@@ -152,15 +79,6 @@ namespace UmbracoSolarProject1.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Register");
-                });
-
-            modelBuilder.Entity("UmbracoSolarProject1.Models.BillingDetail", b =>
-                {
-                    b.HasOne("UmbracoSolarProject1.Models.Register", "Register")
-                        .WithMany()
-                        .HasForeignKey("RegisterId");
-
-                    b.Navigation("Register");
                 });
 #pragma warning restore 612, 618
         }

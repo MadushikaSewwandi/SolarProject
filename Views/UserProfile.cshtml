@@ -1,12 +1,12 @@
 ﻿@using Umbraco.Cms.Web.Common.PublishedModels;
-@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.Register>
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage<ContentModels.UserProfile>
 @using ContentModels = Umbraco.Cms.Web.Common.PublishedModels;
 @{
 	Layout = "Master2.cshtml";
+
+   
 }
-
-
-	<!-- SECTION -->
+<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -17,29 +17,31 @@
 						<!-- Billing Details -->
 						<div class="billing-details">
 							<div class="section-title">
-								<h3 class="title">Register</h3>
+								<h3 class="title">User Profile</h3>
 							</div>
 							
 							
-<form name="sentMessage" id="RegisterForm" novalidate="novalidate">
+                            <form name="sentMessage" id="ProfileForm" novalidate="novalidate">
+                            <!--<div class="form-group">-->
+                            <!--    <input class="input" type="file" id="imageUpload" accept="image/*" required="required">-->
+                            <!--</div>-->
+
 							<div class="form-group">
-								<input class="input" type="text" id="firstname" placeholder="First Name" required="required">
+								<input class="input" type="text" id="firstname" placeholder="First Name" required="required" >
 								
 							</div>
+						
 							<div class="form-group">
-								<input class="input" type="text" id="lastname" placeholder="Last Name" required="required">
+								<input class="input" type="text" id="lastname" placeholder="Last Name" required="required" >
 							</div>
 							<div class="form-group">
-								<input class="input" type="tel" id="tel" placeholder="Telephone" required="required">
+								<input class="input" type="tel" id="tel" placeholder="Telephone" required="required" >
 							</div>
 							<div class="form-group">
-								<input class="input" type="email" id="email" placeholder="Email" required="required">
+								<input class="input" type="email" id="email" placeholder="Email" required="required" >
 							</div>
 							<div class="form-group">
-								<input class="input" type="password" id="password" placeholder="password" required="required">
-							</div>
-							<div class="form-group">
-								<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="RegisterButton">Register</button>
+								<button class="btn btn-primary font-weight-bold py-3 px-5" type="submit" id="ProfileButton">Submit</button>
                             </div>
 							
 							
@@ -71,5 +73,6 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
+	
 		
-		
+	

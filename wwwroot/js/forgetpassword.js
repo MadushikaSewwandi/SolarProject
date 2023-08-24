@@ -1,6 +1,6 @@
 $(document).ready(function () {
   $("#ForgetPasswordButton").click(function (event) {
-    
+      debugger
     
      
       var formData = {
