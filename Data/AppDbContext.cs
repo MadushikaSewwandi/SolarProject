@@ -20,7 +20,9 @@ namespace UmbracoSolarProject1.Data
 
 
 		}
+		public DbSet<Rating> Rating { get; set; }
 
+		public DbSet<BillingDetail> BillingDetail { get; set; }
 		public DbSet<Register> Register { get; set; }
 		public DbSet<CartItem> CartItems { get; set; }
 	}

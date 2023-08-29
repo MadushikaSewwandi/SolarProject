@@ -10,9 +10,7 @@ $(document).ready(function () {
     fetchRatings(productName);
     fetchRatings();
     updateStartEndValues(newStart, newEnd);
-  } else {
-    console.error("User data not found in localStorage.");
-  }
+  } 
 });
 
 

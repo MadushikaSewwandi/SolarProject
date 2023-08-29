@@ -10,7 +10,7 @@ namespace UmbracoSolarProject1.Models
         public string? Address { get; set; }
         public string? Country { get; set; }
         public string? City { get; set; }
-        public string? ZipCode { get; set; }
+        public int ZipCode { get; set; }
 
         public string? FirstName { get; set; }
 
@@ -20,6 +20,6 @@ namespace UmbracoSolarProject1.Models
         public int? Telephone { get; set; }
 
 
-        public Register? Register { get; set; }
+        
     }
 }

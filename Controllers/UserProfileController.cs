@@ -59,7 +59,9 @@ namespace UmbracoSolarProject1.Controllers
                 return NotFound();
             }
 
-            // Retrieve custom properties from the member
+            var data = member.ToString(); // Log the entire member object
+
+           
             string firstName = member.GetValue<string>("firstName");
             string lastName = member.GetValue<string>("lastName");
             string phoneNumber = member.GetValue<string>("phoneNumber");
@@ -75,16 +77,7 @@ namespace UmbracoSolarProject1.Controllers
 
             return Ok(profileDetails);
 
-            //int.TryParse(member.Id, out int memberId);
-            //IMember callingMember = _memberService.GetById(memberId);
-
-            //if (callingMember == null)
-            //{
-            //  return NotFound();
-            //}
-
-            //return Ok(callingMember);
-            //turn Ok(member);
+           
         }
 
 

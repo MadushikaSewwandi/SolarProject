@@ -1,11 +1,10 @@
 $(document).ready(function () {
-    debugger
     var user = localStorage.getItem("user");
     if (user) {
       var parsedUser = JSON.parse(user);
       var userId = parsedUser?.id;
       var token = parsedUser?.token;
-      var userEmail = parsedUser?.email;
+      var userEmail = parsedUser?.firstName;
 
   
       $.ajax({
@@ -51,16 +50,16 @@ $(document).ready(function () {
             };
 
             $.ajax({
-                url: "/api/UserProfile/GetProfileDetails", // Replace with your API endpoint
+                url: "/api/UserProfile/GetProfileDetails", 
                 type: "POST",
                 data: JSON.stringify(formData),
                 contentType: "application/json",
                 headers: {
-                    "Authorization": "Bearer " + token, // Include the JWT token in the request headers
+                    "Authorization": "Bearer " + token, 
                 },
                 success: function (response) {
                     console.log("User Update successfully!");
-                    window.location.href = "/"; // Redirect to the desired page
+                    window.location.href = "/"; 
                 },
                 error: function (error) {
                     console.error("Error sending form data:", error);

@@ -10,7 +10,7 @@ $(document).ready(function () {
       var quantity = parseInt($("#quantityInput").val());
       var productLink = $("#quantityInput").data("product-url");
   
-      // Get user data from localStorage
+      
       var user = localStorage.getItem("user");
       if (user) {
         var parsedUser = JSON.parse(user);
@@ -29,22 +29,22 @@ $(document).ready(function () {
         };
         console.log(item)
   
-        // Make an AJAX POST request to add the item to the cart
+       
         $.ajax({
           type: "POST",
           url: "/api/AddtoCart/AddItem",
           data: JSON.stringify(item),
           contentType: "application/json",
           headers: {
-            "Authorization": "Bearer " + token, // Include the JWT token in the request headers
+            "Authorization": "Bearer " + token, 
           },
           success: function (response) {
             console.log("Item added to the cart successfully.");
-            // Handle any success actions if needed
+           
           },
           error: function (error) {
             console.error("Error adding item to cart:", error.responseText);
-            // Handle any error actions if needed
+            
           },
         });
         

@@ -1,10 +1,10 @@
 $(document).ready(function () {
   $("#ResetPasswordButton").click(function (event) {
       debugger
-      // Extract token from URL query parameters
+      
     var urlParams = new URLSearchParams(window.location.search);
     var email = urlParams.get("email");
-    var token = urlParams.get("token"); // Assuming "token" is the parameter name
+    var token = urlParams.get("token"); 
 
       var formData = {
         Id: email,

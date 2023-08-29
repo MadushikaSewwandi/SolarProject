@@ -83,12 +83,12 @@ function updateCartTable(cartItems) {
   var tableItemsContainer = $("#cartTableBody");
   tableItemsContainer.empty();
 
-  var tableItemHtml = ""; // Initialize tableItemHtml outside the loop
+  var tableItemHtml = ""; 
 
   cartItems.forEach(function (cartItem) {
     var totalPrice = ((cartItem.productPrice) * cartItem.quantity).toLocaleString();
 
-    // Concatenate the tableItemHtml for each cart item
+    
     tableItemHtml +=
       "<tr>" +
       "<td class='align-middle'><img src='" + cartItem.productThumbnail + "' alt='' style='width: 50px;'></td>" +
@@ -107,7 +107,7 @@ function updateCartTable(cartItems) {
       "</tr>";
   });
 
-  // Append the generated HTML to the cart table body after the loop is done
+  
   tableItemsContainer.html(tableItemHtml);
 }
 
@@ -122,7 +122,7 @@ function updateOrderSummary(cartItems) {
   var totalPrice = 0;
 
   cartItems.forEach(function (item) {
-    // Replace calculateTotalPrice(item) with your actual calculation logic
+    
     var totalPricePerItem = calculateTotalPrice(item); 
     orderProductsHtml +=
       "<div class='order-col'>" +
@@ -130,15 +130,15 @@ function updateOrderSummary(cartItems) {
       "<div>$" + totalPricePerItem + "</div>" +
       "</div>";
 
-    totalPrice += totalPricePerItem; // Accumulate the total price outside the loop
+    totalPrice += totalPricePerItem; 
   });
 
   console.log("orderProductsHtml:", orderProductsHtml);
   console.log("totalPrice:$", totalPrice);
 
-  // Update the order summary section
+  
   $(".order-products").html(orderProductsHtml);
-  $(".order-total").text("$" + totalPrice.toLocaleString()); // Display the total price
+  $(".order-total").text("$" + totalPrice.toLocaleString()); 
 }
 
 

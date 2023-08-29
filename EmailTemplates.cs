@@ -119,7 +119,7 @@
                                             <table role=""presentation"" border=""0"" cellpadding=""0"" cellspacing=""0"" style=""border-collapse: separate; mso-table-lspace: 0pt; mso-table-rspace: 0pt; width: 100%;"" width=""100%"">
                                                 <tbody><tr>
                                                     <td style=""font-family:Roboto,sans-serif;font-size:16px;vertical-align:top; display: flex; justify-content: center;"" valign=""top"">
-                                                        <img src=""{{webUrl}}/assets/text-logo2.png"" alt="""" style=""width:200px;margin: auto; margin-top: 25px;"">
+                                                      
                                                     </td>
                                                 </tr>
                                             </tbody></table>

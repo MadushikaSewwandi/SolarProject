@@ -83,8 +83,9 @@ namespace UmbracoSolarProject1.Controllers
 			member.SetValue("firstName", model.FirstName);
             member.SetValue("lastName", model.LastName);
             member.SetValue("phoneNumber", model.PhoneNumber);
-            
-            member.IsApproved = true;
+			member.SetValue("email", model.Email);
+
+			member.IsApproved = true;
 
             // Save the member
             _memberService.Save(member);
@@ -99,12 +100,14 @@ namespace UmbracoSolarProject1.Controllers
 		[Route("Login")]
 		public async Task<IActionResult> Login([FromBody] Login model)
 		{
-            
+
+            try
+            {
                 var user = await _memberManager.FindByNameAsync(model.Email);
 
                 if (user == null)
                 {
-                    return BadRequest( "User doesn't exist.");
+                    return BadRequest("User doesn't exist.");
                 }
 
                 var passwordCorrect = await _memberManager.CheckPasswordAsync(user, model.Password);
@@ -113,9 +116,6 @@ namespace UmbracoSolarProject1.Controllers
                 {
                     return BadRequest("Password is incorrect.");
                 }
-
-                
-
 
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Key"]));
 
@@ -132,13 +132,17 @@ namespace UmbracoSolarProject1.Controllers
                     expiration = token.ValidTo,
                     id = user.Id,
                     firstName = user.Name,
-                   
+
 
                 });
-            
-           
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
-        }
+            
+           }
 
         [HttpGet]
         [Route("SendResetPwdLink")]

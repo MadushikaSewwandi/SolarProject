@@ -11,13 +11,13 @@ $(document).ready(function () {
     });
 
     function convertToSlug(text) {
-        // Remove special characters and convert to lowercase
+        
         let slugText = text.replace(/[^\w\s]/g, '').toLowerCase();
-        // Replace spaces with hyphens
+       
         slugText = slugText.replace(/\s+/g, '-');
-        // Remove any double hyphens that might occur due to consecutive spaces
+     
         slugText = slugText.replace(/--+/g, '-');
-        // Remove leading and trailing hyphens
+      
         slugText = slugText.replace(/^-+|-+$/g, '');
         return `/${slugText}/`;
     }
@@ -31,11 +31,11 @@ $(document).ready(function () {
         } else {
             var resultList = $("<ul></ul>");
             results.forEach(function (result) {
-                // Create a clickable anchor element for each result
+               
                 var clickableItem = $("<a></a>");
                 clickableItem.css("color", "white");
                 clickableItem.text(result);
-                clickableItem.attr("href", convertToSlug(result)); // Set the href to the slug link
+                clickableItem.attr("href", convertToSlug(result)); 
 
                 resultList.append($("<li></li>").append(clickableItem));
             });
